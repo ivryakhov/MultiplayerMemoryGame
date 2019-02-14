@@ -1,14 +1,28 @@
-﻿import React from 'react';
-import { Route } from 'react-router';
-import Layout from './components/Layout';
-import Home from './components/Home';
-import Counter from './components/Counter';
-import FetchData from './components/FetchData';
+﻿import React, { Component } from 'react';
+import GameBoard from './components/GameBoard';
 
-export default () => (
-  <Layout>
-    <Route exact path='/' component={Home} />
-    <Route path='/counter' component={Counter} />
-    <Route path='/fetchdata/:startDateIndex?' component={FetchData} />
-  </Layout>
-);
+class App extends Component {
+    render() {
+        return (
+            <div className="App">
+                <div className="tile is-ancestor">
+                    <div className="tile is-3 is-vertical is-parent">
+                        <div className="tile is-child box">
+                            <p className="title">Your Score:</p>
+                        </div>
+                        <div className="tile is-child box">
+                            <p className="title">Opponent's score:</p>
+                        </div>
+                    </div>
+                    <div className="tile is-parent">
+                        <div className="tile is-child box">
+                            <GameBoard />
+                       </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default App;
