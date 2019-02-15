@@ -1,10 +1,17 @@
 ﻿import React from "react";
+import styles from './CardStyles';
 
-const Card = () => {
+const Card = (props) => {
+    const openedStyle = !props.close ? styles.opened : {};
+    const matchedStyle = props.complete ? styles.matched : {};
+
     return (
-        <div className="gamecard">
-            <div className="front">
+        <div style={{...styles.card, ...openedStyle, ...matchedStyle}}>
+            <div style={{ ...styles.div, ...styles.front }} className="has-background-primary has-text-white">
                 ?
+            </div>
+            <div style={{ ...styles.div, ...styles.back }}>
+                !
             </div>
         </div>
     );
