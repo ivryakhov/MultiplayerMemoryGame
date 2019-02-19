@@ -5,22 +5,26 @@ import styles from './GameBoardStyles';
 class GameBoard extends React.Component {
     constructor(props) {
         super(props);
+                     
         this.state = {
-            pictures: [
-                'fa-anchor', 'fa-ambulance', 'fa-beer', 'fa-balance-scale', 'fa-bath',
-                'fa-basketball-ball', 'fa-bicycle', 'fa-bone', 'fa-bug', 'fa-bus', 'fa-crown',
-                'fa-crow', 'fa-chess-knight', 'fa-couch', 'fa-coffee'],
-            duplicatedPictures: [],
+            cards: this.prepareCards(),
             randomizedPictures: [],
             finalizedPictures: [],
             openedPictures: []
         };
-        this.start();
+       
     }
+
+    names =
+        [
+            'fa-anchor', 'fa-ambulance', 'fa-beer', 'fa-balance-scale', 'fa-bath',
+            'fa-basketball-ball', 'fa-bicycle', 'fa-bone', 'fa-bug', 'fa-bus', 'fa-crown',
+            'fa-crow', 'fa-chess-knight', 'fa-couch', 'fa-coffee'
+        ];
 
     handleClick(name, index) {
         console.log(name, index);
-        if (this.state.openedPictures.length === 2) {
+    /*    if (this.state.openedPictures.length === 2) {
             setTimeout(() => {
                 this.check();
             }, 750);
@@ -42,7 +46,7 @@ class GameBoard extends React.Component {
                     this.check();
                 }, 750);
             }
-        }
+        }*/
     }
 
     check() {
@@ -61,31 +65,25 @@ class GameBoard extends React.Component {
         });
     }
 
-    start() {
-        let finalizedPictures = [];
-        this.state.duplicatedPictures = this.state.pictures.concat(this.state.pictures);
-        this.state.randomizedPictures = this.shuffle(this.state.duplicatedPictures);
-        this.state.randomizedPictures.map((name, index) => {
-            finalizedPictures.push({
+    prepareCards() {
+        const duplicatedNames = this.names.concat(this.names);
+        const randomizedNames = this.shuffle(duplicatedNames);
+        const preparedCards = randomizedNames.map((name, index) => {
+            const card =
+            {
                 name,
                 close: true,
                 complete: false,
                 fail: false
-            });
+            };
+            return card;
         });
-        this.state.finalizedPictures = finalizedPictures;
+        return preparedCards;
     }
 
     shuffle(array) {
-        let currentIndex = array.length, temporaryValue, randomIndex;
-        while (0 !== currentIndex) {
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex -= 1;
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
-        }
-        return array
+        array.sort((a, b) => Math.random() - 0.5);
+        return array;
     }
 
     render() {
@@ -93,8 +91,8 @@ class GameBoard extends React.Component {
             <div>
                 <div style={styles.playground}>
                     {
-                        this.state.finalizedPictures.map((picture, index) => {
-                            return <Card key={index} picture={picture.name} click={() => { this.handleClick(picture.name, index); }} close={picture.close} complete={picture.complete} />;
+                        this.state.cards.map((card, index) => {
+                            return <Card key={index} picture={card.name} click={() => { this.handleClick(card.name, index); }} close={card.close} complete={card.complete} />;
                         })
                     }
                 </div>

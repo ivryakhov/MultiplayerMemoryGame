@@ -4,7 +4,7 @@ import GameBoard from './components/GameBoard';
 class App extends Component {
     render() {
         return (
-            <div className="App">
+            <div className="app">
                 <div className="tile is-ancestor">
                     <div className="tile is-3 is-vertical is-parent">
                         <div className="tile is-child box">
