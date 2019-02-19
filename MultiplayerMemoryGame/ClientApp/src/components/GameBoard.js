@@ -1,21 +1,26 @@
 ﻿import React from "react";
 import Card from "./Card";
+import styles from './GameBoardStyles';
 
 class GameBoard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            pictures: ['cat', 'dog', 'mice', 'bird'],
+            pictures: [
+                'fa-anchor', 'fa-ambulance', 'fa-beer', 'fa-balance-scale', 'fa-bath',
+                'fa-basketball-ball', 'fa-bicycle', 'fa-bone', 'fa-bug', 'fa-bus', 'fa-crown',
+                'fa-crow', 'fa-chess-knight', 'fa-couch', 'fa-coffee'],
             duplicatedPictures: [],
             randomizedPictures: [],
-            finilizedPictures: [],
+            finalizedPictures: [],
             openedPictures: []
         };
         this.start();
     }
 
     handleClick(name, index) {
-        if (this.state.openedPictures.length == 2) {
+        console.log(name, index);
+        if (this.state.openedPictures.length === 2) {
             setTimeout(() => {
                 this.check();
             }, 750);
@@ -24,26 +29,26 @@ class GameBoard extends React.Component {
                 name,
                 index
             };
-            let finalizedPictures = this.state.finilizedPictures;
+            let finalizedPictures = this.state.finalizedPictures;
             let pictures = this.state.openedPictures;
             finalizedPictures[index].close = false;
             pictures.push(picture);
             this.setState({
                 openedPictures: pictures,
-                finilizedPictures: finalizedPictures
+                finalizedPictures: finalizedPictures
             });
-            if(this.state.openedPictures.length == 2) {
+            if(this.state.openedPictures.length === 2) {
                 setTimeout(() => {
-                    this.check()
-                },750)
+                    this.check();
+                }, 750);
             }
         }
     }
 
     check() {
-        let finalizedPictures = this.state.finilizedPictures;
-        if ((this.state.openedPictures[0].name == this.state.openedPictures[1].name) &&
-            (this.state.openedPictures[0].name != this.state.openedPictures[1].index)) {
+        let finalizedPictures = this.state.finalizedPictures;
+        if ((this.state.openedPictures[0].name === this.state.openedPictures[1].name) &&
+            (this.state.openedPictures[0].name !== this.state.openedPictures[1].index)) {
             finalizedPictures[this.state.openedPictures[0].index].complete = true;
             finalizedPictures[this.state.openedPictures[1].index].complete = true;
         } else {
@@ -86,11 +91,10 @@ class GameBoard extends React.Component {
     render() {
         return (
             <div>
-                <h1>Game Board</h1>
-                <div className="playground">
+                <div style={styles.playground}>
                     {
                         this.state.finalizedPictures.map((picture, index) => {
-                            return <Card picture={picture.name} click={() => { this.handleClicl(picture.name, index); }} close={picture.close} complete={picture.complete} />;
+                            return <Card key={index} picture={picture.name} click={() => { this.handleClick(picture.name, index); }} close={picture.close} complete={picture.complete} />;
                         })
                     }
                 </div>

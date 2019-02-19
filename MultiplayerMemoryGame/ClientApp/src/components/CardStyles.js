@@ -32,6 +32,7 @@
         justifyContent: 'center'
     },
     back: {
+        fontSize: '50px',
         transform: 'rotateY(180deg)',
         lineHeight: '110px'
     },
