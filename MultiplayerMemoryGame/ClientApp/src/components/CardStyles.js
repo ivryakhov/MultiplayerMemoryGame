@@ -24,7 +24,7 @@
     },
     front: {
         fontSize: '50px',
-        lineHeight: '120px',
+        lineHeight: '140px',
         cursor: 'pointer',
         color: 'darken(#f4f5f7, 20 %)',
         display: 'flex',
@@ -44,12 +44,16 @@
         transform: 'rotateY(180deg)'
     },
     matched: {
-        transform: 'rotateY(180deg)'
+        transform: 'rotateY(180deg)',
+        pointerEvents: 'none'
     },
     mback: {
         boxShadow: '0 0 0 2px rgba(#000, .05) inset',
         animation: 'selected .8s 0s ease 1',
         animationFillMode: 'both',
         opacity: '.2'
+    },
+    disabled: {
+        pointerEvents: 'none'
     }
 };

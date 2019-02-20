@@ -8,61 +8,74 @@ class GameBoard extends React.Component {
                      
         this.state = {
             cards: this.prepareCards(),
-            randomizedPictures: [],
-            finalizedPictures: [],
-            openedPictures: []
+            openedCard: {},
+            turnState: 'BEGIN'
         };
        
     }
 
-    names =
-        [
-            'fa-anchor', 'fa-ambulance', 'fa-beer', 'fa-balance-scale', 'fa-bath',
-            'fa-basketball-ball', 'fa-bicycle', 'fa-bone', 'fa-bug', 'fa-bus', 'fa-crown',
-            'fa-crow', 'fa-chess-knight', 'fa-couch', 'fa-coffee'
-        ];
+    names = [
+        'fa-anchor', 'fa-ambulance', 'fa-beer', 'fa-balance-scale', 'fa-bath',
+        'fa-basketball-ball', 'fa-bicycle', 'fa-bone', 'fa-bug', 'fa-bus', 'fa-crown',
+        'fa-crow', 'fa-chess-knight', 'fa-couch', 'fa-coffee'
+    ];
 
     handleClick(name, index) {
         console.log(name, index);
-    /*    if (this.state.openedPictures.length === 2) {
-            setTimeout(() => {
-                this.check();
-            }, 750);
-        } else {
-            let picture = {
-                name,
-                index
-            };
-            let finalizedPictures = this.state.finalizedPictures;
-            let pictures = this.state.openedPictures;
-            finalizedPictures[index].close = false;
-            pictures.push(picture);
-            this.setState({
-                openedPictures: pictures,
-                finalizedPictures: finalizedPictures
-            });
-            if(this.state.openedPictures.length === 2) {
-                setTimeout(() => {
-                    this.check();
-                }, 750);
-            }
-        }*/
-    }
+        var newCards = [...this.state.cards];
+        switch (this.state.turnState) {
+            case 'BEGIN':
+                newCards[index].disabled = true;
+                newCards[index].close = false;
+                this.setState({
+                    turnState: 'ONE_CARD_OPENED',
+                    openedCard: { name, index },
+                    cards: newCards
+                });
+                break;
+            case 'ONE_CARD_OPENED':
+                const openedCard = this.state.openedCard;
+                newCards[index].disabled = true;
+                newCards[index].close = false;
 
-    check() {
-        let finalizedPictures = this.state.finalizedPictures;
-        if ((this.state.openedPictures[0].name === this.state.openedPictures[1].name) &&
-            (this.state.openedPictures[0].name !== this.state.openedPictures[1].index)) {
-            finalizedPictures[this.state.openedPictures[0].index].complete = true;
-            finalizedPictures[this.state.openedPictures[1].index].complete = true;
-        } else {
-            finalizedPictures[this.state.openedPictures[0].index].close = true;
-            finalizedPictures[this.state.openedPictures[1].index].close = true;
+                this.setState({
+                    cards: newCards,
+                    turnState: 'UNKNOWN'
+                });
+
+                if (name !== openedCard.name) {
+                    setTimeout(() => {
+                        console.log('do not match');
+                        newCards[index] = {
+                            name: name,
+                            close: true,
+                            disabled: false
+                        };
+                        newCards[openedCard.index] = {
+                            name: openedCard.name,
+                            close: true,
+                            disabled: false
+                        };
+
+                        console.log("timount");
+                        this.setState({
+                            openedCard: {},
+                            cards: newCards,
+                            turnState: 'BEGIN'
+                        });
+                    }, 1300);
+                } else {
+                    newCards[index].matched = true;
+                    newCards[openedCard.index].matched = true;
+                    this.setState({
+                        turnState: 'BEGIN',
+                        cards: newCards
+                    });
+                }
+                break;
+            default:
+                console.log('Unknown state;');
         }
-        this.setState({
-            finalizedPictures,
-            openedPictures: []
-        });
     }
 
     prepareCards() {
@@ -71,10 +84,10 @@ class GameBoard extends React.Component {
         const preparedCards = randomizedNames.map((name, index) => {
             const card =
             {
-                name,
+                name: name,
                 close: true,
-                complete: false,
-                fail: false
+                disabled: false,
+                matched: false
             };
             return card;
         });
@@ -92,7 +105,7 @@ class GameBoard extends React.Component {
                 <div style={styles.playground}>
                     {
                         this.state.cards.map((card, index) => {
-                            return <Card key={index} picture={card.name} click={() => { this.handleClick(card.name, index); }} close={card.close} complete={card.complete} />;
+                            return <Card key={index} picture={card.name} click={() => { this.handleClick(card.name, index); }} close={card.close} disabled={card.disabled} matched={card.matched}/>;
                         })
                     }
                 </div>
