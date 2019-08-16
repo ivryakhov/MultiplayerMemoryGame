@@ -1,9 +1,7 @@
 ﻿import React, { Component } from 'react';
-import GameBoard from './components/GameBoard';
+import { ConnectedGameBoard } from './components/GameBoard';
 
-class App extends Component {
-    render() {
-        return (
+export const App = () => (
             <div className="app">
                 <div className="tile is-ancestor">
                     <div className="tile is-3 is-vertical is-parent">
@@ -16,13 +14,9 @@ class App extends Component {
                     </div>
                     <div className="tile is-parent">
                         <div className="tile is-child box">
-                            <GameBoard />
+                            <ConnectedGameBoard />
                        </div>
                     </div>
                 </div>
             </div>
         );
-    }
-}
-
-export default App;

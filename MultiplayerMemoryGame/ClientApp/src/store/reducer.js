@@ -1,6 +1,12 @@
 ﻿import { combineReducers } from 'redux';
 import * as mutations from './mutations';
 
+const names = [
+    'fa-anchor', 'fa-ambulance', 'fa-beer', 'fa-balance-scale', 'fa-bath',
+    'fa-basketball-ball', 'fa-bicycle', 'fa-bone', 'fa-bug', 'fa-bus', 'fa-crown',
+    'fa-crow', 'fa-chess-knight', 'fa-couch', 'fa-coffee'
+];
+
 let defaultState = {
     board: {
         cards: prepareCards(),
@@ -11,7 +17,7 @@ let defaultState = {
 };
 
 export const reducer = combineReducers({
-    board(boardState = defaultState.board, action) {
+    board:(boardState = defaultState.board, action) => {
         let { type, name, index } = action;
         switch (type) {
             case mutations.PROCESS_CARD_CLICK:
@@ -21,12 +27,6 @@ export const reducer = combineReducers({
         }        
     }
 });
-
-const names = [
-    'fa-anchor', 'fa-ambulance', 'fa-beer', 'fa-balance-scale', 'fa-bath',
-    'fa-basketball-ball', 'fa-bicycle', 'fa-bone', 'fa-bug', 'fa-bus', 'fa-crown',
-    'fa-crow', 'fa-chess-knight', 'fa-couch', 'fa-coffee'
-];
 
 function prepareCards() {
     const duplicatedNames = names.concat(names);
@@ -50,25 +50,25 @@ function shuffle(array) {
 }
 
 function updateBoardState(boardState, name, index) {
-    var newCards = [...this.state.cards];
+    var newCards = [...boardState.cards];
     switch (boardState.turnState) {
         case mutations.BEGIN_TURN:
             newCards[index].disabled = true;
             newCards[index].close = false;
             this.setState({
-                turnState: 'ONE_CARD_OPENED',
+                turnState: mutations.ONE_CARD_OPENED,
                 openedCard: { name, index },
                 cards: newCards
             });
             break;
-        case 'ONE_CARD_OPENED':
+        case mutations.ONE_CARD_OPENED:
             const openedCard = this.state.openedCard;
             newCards[index].disabled = true;
             newCards[index].close = false;
 
             this.setState({
                 cards: newCards,
-                turnState: 'UNKNOWN'
+                turnState: mutations.UNKNOWN_STATE
             });
 
             if (name !== openedCard.name) {
@@ -89,14 +89,14 @@ function updateBoardState(boardState, name, index) {
                     this.setState({
                         openedCard: {},
                         cards: newCards,
-                        turnState: 'BEGIN'
+                        turnState: mutations.BEGIN_TURN
                     });
                 }, 1300);
             } else {
                 newCards[index].matched = true;
                 newCards[openedCard.index].matched = true;
                 this.setState({
-                    turnState: 'BEGIN',
+                    turnState: mutations.BEGIN_TURN,
                     cards: newCards
                 });
             }

@@ -1,6 +1,8 @@
 ﻿import React from "react";
 import Card from "./Card";
 import styles from './GameBoardStyles';
+import { processCardClick } from '../store/mutations';
+import { connect } from 'react-redux';
 
 export const GameBoard = ({ board, handleClickOnCard }) => (
     <div>
@@ -16,14 +18,14 @@ export const GameBoard = ({ board, handleClickOnCard }) => (
 
 const mapStateToProps = (state) => {
     return {
-        board: state.board
+        board: state.reducer.board
     };
 };
 
-const mapDispatchToProps = (dispatch, { name, index }) => ({
+const mapDispatchToProps = (dispatch) => ({
     handleClickOnCard(name, index) {
         dispatch(processCardClick(name, index));
     }
 });
 
-export const ConnectedGameBoard = connect(map);
+export const ConnectedGameBoard = connect(mapStateToProps, mapDispatchToProps)(GameBoard);
