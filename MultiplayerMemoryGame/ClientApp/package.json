@@ -1,27 +1,4 @@
 {
-  "name": "MultiplayerMemoryGame",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "bootstrap": "^3.4.1",
-    "react": "^16.9.0",
-    "react-bootstrap": "^0.31.5",
-    "react-dom": "^16.9.0",
-    "react-redux": "^5.1.1",
-    "react-router-bootstrap": "^0.24.4",
-    "react-router-dom": "^4.3.1",
-    "react-router-redux": "^5.0.0-alpha.8",
-    "react-scripts": "^3.1.0",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.3.0",
-    "rimraf": "^2.6.3"
-  },
-  "scripts": {
-    "start": "rimraf ./build && react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -33,5 +10,28 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "dependencies": {
+    "bootstrap": "^3.4.1",
+    "react": "^16.9.0",
+    "react-bootstrap": "^0.31.5",
+    "react-dom": "^16.9.0",
+    "react-redux": "^5.1.1",
+    "react-router-bootstrap": "^0.24.4",
+    "react-router-dom": "^4.3.1",
+    "react-router-redux": "^5.0.0-alpha.8",
+    "react-scripts": "^3.1.0",
+    "redux": "^3.7.2",
+    "redux-saga": "^1.0.5",
+    "rimraf": "^2.6.3"
+  },
+  "name": "multiplayer-memory-game",
+  "private": true,
+  "scripts": {
+    "start": "rimraf ./build && react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "version": "0.1.0"
 }

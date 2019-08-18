@@ -1,8 +1,8 @@
 ﻿import React from "react";
-import Card from "./Card";
-import styles from './GameBoardStyles';
-import { processCardClick } from '../store/mutations';
-import { connect } from 'react-redux';
+import { Card } from "./Card";
+import styles from "./GameBoardStyles";
+import { processCardClick, requestCompareCards } from "../store/mutations";
+import { connect } from "react-redux";
 
 export const GameBoard = ({ board, handleClickOnCard }) => (
     <div>
@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     handleClickOnCard(name, index) {
         dispatch(processCardClick(name, index));
+        dispatch(requestCompareCards(name, index));
     }
 });
 

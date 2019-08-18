@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import styles from './CardStyles';
 
-const Card = (props) => {
+export const Card = (props) => {
     const openedStyle = !props.close ? styles.opened : {};
     const disabledStyle = props.disabled ? styles.matched : {};
     const backColor = props.matched ? 'has-background-warning grey-dark' : 'has-background-success has-text-light';
@@ -16,5 +16,3 @@ const Card = (props) => {
         </div>
     );
 };
-
-export default Card;
