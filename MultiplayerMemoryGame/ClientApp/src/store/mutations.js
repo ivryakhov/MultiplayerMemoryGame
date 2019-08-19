@@ -13,14 +13,13 @@ export const processCardClick = (name, index) => ({
     index: index
 });
 
-export const requestCompareCards = (name, index) => ({
-    type: REQUEST_COMPARE_CARDS,
-    name: name,
-    index: index
+export const compareOpenedCards = () => ({
+    type: COMPARE_CARDS
 });
 
-export const compareOpenedCards = (name, index) => ({
-    type: COMPARE_CARDS,
-    name: name,
-    index: index
-});
+export function requestCompareCards() {
+    return {
+        type: REQUEST_COMPARE_CARDS
+    };
+
+}

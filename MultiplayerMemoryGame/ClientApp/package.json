@@ -22,6 +22,7 @@
     "react-router-redux": "^5.0.0-alpha.8",
     "react-scripts": "^3.1.0",
     "redux": "^3.7.2",
+    "redux-loop": "^5.0.0",
     "redux-saga": "^1.0.5",
     "rimraf": "^2.6.3"
   },

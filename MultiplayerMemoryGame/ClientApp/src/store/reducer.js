@@ -1,5 +1,5 @@
-﻿import { combineReducers } from 'redux';
-import * as mutations from './mutations';
+﻿import * as mutations from './mutations';
+import { loop, Cmd, combineReducers } from 'redux-loop';
 
 const names = [
     'fa-anchor', 'fa-ambulance', 'fa-beer', 'fa-balance-scale', 'fa-bath',
@@ -23,14 +23,14 @@ export const reducer = combineReducers({
             case mutations.PROCESS_CARD_CLICK:
                 return updateBoardState(boardState, name, index);
             case mutations.COMPARE_CARDS:
-                return compareCards(boardState, name, index);
+                return compareCards(boardState);            
             default:
                 return boardState;
         }        
     }
 });
 
-function compareCards(boardState, name, index) {
+function compareCards(boardState) {
     switch (boardState.turnState) {
         case mutations.TWO_CARDS_OPENED:
         {
@@ -42,7 +42,6 @@ function compareCards(boardState, name, index) {
                     newCards[index].matched = true));
             }
             else {
-                console.log("do not match");
                 openedCards.map(({ name, index }) => {                    
                     newCards[index].closed = true;
                     newCards[index].disabled = false;                    
@@ -103,13 +102,16 @@ function updateBoardState(boardState, name, index) {
             newCards[index].disabled = true;
             newCards[index].closed = false;
             newOpenedCards[1] = { name, index };
-            return {
-                ...boardState,
-                openedCards: newOpenedCards,
-                cards: newCards,
-                turnState: mutations.TWO_CARDS_OPENED
-            };
-            }
+            return loop(
+                {
+                    ...boardState,
+                    openedCards: newOpenedCards,
+                    cards: newCards,
+                    turnState: mutations.TWO_CARDS_OPENED
+                },
+                Cmd.action(mutations.requestCompareCards())
+            );
+        }
         case mutations.TWO_CARDS_OPENED:
             return boardState;
 
