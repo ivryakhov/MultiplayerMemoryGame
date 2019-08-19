@@ -10,7 +10,7 @@ const names = [
 let defaultState = {
     board: {
         cards: prepareCards(),
-        openedCard: {},
+        openedCards: [],
         turnState: mutations.BEGIN_TURN
     },
     players: ['Player1', 'Player2']
@@ -34,28 +34,23 @@ function compareCards(boardState, name, index) {
     switch (boardState.turnState) {
         case mutations.TWO_CARDS_OPENED:
         {
-            let newCards = [...boardState.cards];
-            const openedCard = boardState.openedCard;
+            var newCards = boardState.cards;
+            const openedCards = boardState.openedCards;
 
-            if (name !== openedCard.name) {
+            if (opendedCardsAreEqual(openedCards)) {
+                openedCards.map(({ name, index }) => (
+                    newCards[index].matched = true));
+            }
+            else {
                 console.log("do not match");
-                newCards[index] = {
-                    name: name,
-                    close: true,
-                    disabled: false
-                };
-                newCards[openedCard.index] = {
-                    name: openedCard.name,
-                    close: true,
-                    disabled: false
-                };
-            } else {
-                newCards[index].matched = true;
-                newCards[openedCard.index].matched = true;
+                openedCards.map(({ name, index }) => {                    
+                    newCards[index].closed = true;
+                    newCards[index].disabled = false;                    
+                });
             }
             return {
                 ...boardState,
-                openedCard: {},
+                openedCards: [],
                 cards: newCards,
                 turnState: mutations.BEGIN_TURN
             };
@@ -65,6 +60,10 @@ function compareCards(boardState, name, index) {
     }
 }
 
+function opendedCardsAreEqual(openedCards) {
+    return (openedCards[0].name === openedCards[1].name && openedCards[0].index !== openedCards[1].index);
+}
+
 function prepareCards() {
     const duplicatedNames = names.concat(names);
     const randomizedNames = shuffle(duplicatedNames);
@@ -72,7 +71,7 @@ function prepareCards() {
         const card =
         {
             name: name,
-            close: true,
+            closed: true,
             disabled: false,
             matched: false
         };
@@ -87,28 +86,33 @@ function shuffle(array) {
 }
 
 function updateBoardState(boardState, name, index) {
-    var newCards = [...boardState.cards];
+    var newCards = boardState.cards;
+    var newOpenedCards = boardState.openedCards;
     switch (boardState.turnState) {
         case mutations.BEGIN_TURN:
             newCards[index].disabled = true;
-            newCards[index].close = false;
+            newCards[index].closed = false;
+            newOpenedCards[0] = { name, index };
             return {...boardState,
                 turnState: mutations.ONE_CARD_OPENED,
-                openedCard: { name, index },
+                openedCards: newOpenedCards,
                 cards: newCards
             };            
         case mutations.ONE_CARD_OPENED:
         {
-            const openedCard = boardState.openedCard;
             newCards[index].disabled = true;
-            newCards[index].close = false;
-
+            newCards[index].closed = false;
+            newOpenedCards[1] = { name, index };
             return {
                 ...boardState,
+                openedCards: newOpenedCards,
                 cards: newCards,
                 turnState: mutations.TWO_CARDS_OPENED
             };
-        }
+            }
+        case mutations.TWO_CARDS_OPENED:
+            return boardState;
+
         default:
             console.log('Unknown state;');
     }
