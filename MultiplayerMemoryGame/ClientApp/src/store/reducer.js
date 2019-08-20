@@ -22,7 +22,7 @@ export const reducer = combineReducers({
         switch (type) {
             case mutations.PROCESS_CARD_CLICK:
                 return updateBoardState(boardState, name, index);
-            case mutations.COMPARE_CARDS:
+            case mutations.COMPARE_CARDS:                
                 return compareCards(boardState);            
             default:
                 return boardState;
@@ -30,11 +30,23 @@ export const reducer = combineReducers({
     }
 });
 
+function asyncCompareCards(openedCards) {
+    return new Promise((resolve, reject) => {
+        var timeout = 0;
+        if (!opendedCardsAreEqual(openedCards))
+            timeout = 1300;
+        setTimeout(() => {
+            resolve('ok');
+        }, timeout);
+    });
+}
+
 function compareCards(boardState) {
     switch (boardState.turnState) {
         case mutations.TWO_CARDS_OPENED:
         {
-            var newCards = boardState.cards;
+                var newCards = boardState.cards;
+                var timeOut = 0;
             const openedCards = boardState.openedCards;
 
             if (opendedCardsAreEqual(openedCards)) {
@@ -109,7 +121,12 @@ function updateBoardState(boardState, name, index) {
                     cards: newCards,
                     turnState: mutations.TWO_CARDS_OPENED
                 },
-                Cmd.action(mutations.requestCompareCards())
+                Cmd.run(asyncCompareCards, {
+                    args: [newOpenedCards],
+                    successActionCreator: () => ({
+                        type: mutations.COMPARE_CARDS
+                    })
+                })
             );
         }
         case mutations.TWO_CARDS_OPENED:

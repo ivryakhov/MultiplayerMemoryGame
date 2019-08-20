@@ -24,8 +24,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     handleClickOnCard(name, index) {
-        dispatch(processCardClick(name, index));
-        dispatch(requestCompareCards());
+        dispatch(processCardClick(name, index));        
     }
 });
 
