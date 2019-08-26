@@ -1,3 +1,4 @@
+using Akka.Actor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ActorModel.Actors;
 
 namespace MultiplayerMemoryGame
 {
@@ -27,10 +29,19 @@ namespace MultiplayerMemoryGame
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddSingleton(_ => ActorSystem.Create("MemoryGameSystem", ConfigurationLoader.Load()));
+
+            services.AddSingleton<GameControllerActorProvider>(provider =>
+            {
+                var actorSystem = provider.GetService<ActorSystem>();
+                var gameControllerActor = actorSystem.ActorOf(Props.Create(() => new GameControllerActor()));
+                return () => gameControllerActor;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -61,6 +72,16 @@ namespace MultiplayerMemoryGame
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
+            });
+
+            lifetime.ApplicationStarted.Register(() =>
+            {
+                app.ApplicationServices.GetService<ActorSystem>();
+            });
+
+            lifetime.ApplicationStopping.Register(() =>
+            {
+                app.ApplicationServices.GetService<ActorSystem>().Terminate().Wait();
             });
         }
     }
