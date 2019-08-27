@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ActorModel.Actors;
+using MultiplayerMemoryGame.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace MultiplayerMemoryGame
 {
@@ -38,6 +40,19 @@ namespace MultiplayerMemoryGame
                 var gameControllerActor = actorSystem.ActorOf(Props.Create(() => new GameControllerActor()));
                 return () => gameControllerActor;
             });
+
+            services.AddSingleton<SignalRBridgeActorProvider>(provider =>
+            {
+                var actorSystem = provider.GetService<ActorSystem>();
+                var gameControllerActorProvider = provider.GetService<GameControllerActorProvider>();
+                var hubContext = provider.GetService<IHubContext<GameHub>>();
+                var signalRBridgeActor = actorSystem.ActorOf(Props.Create(
+                    () => new SignalRBridgeActor(new SignalRGameEventsPusher(hubContext), gameControllerActorProvider)
+                    ));
+                return () => signalRBridgeActor;
+            });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,13 +71,6 @@ namespace MultiplayerMemoryGame
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
-            });
 
             app.UseSpa(spa =>
             {
@@ -83,6 +91,12 @@ namespace MultiplayerMemoryGame
             {
                 app.ApplicationServices.GetService<ActorSystem>().Terminate().Wait();
             });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<GameHub>("/game");
+            });
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
