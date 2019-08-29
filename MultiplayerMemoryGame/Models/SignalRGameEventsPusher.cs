@@ -14,7 +14,7 @@ namespace MultiplayerMemoryGame.Models
 
         public void PlayerJoined(string playerName)
         {
-            _gameHubContext.Clients.All.SendAsync("playerJoined", playerName);
+            _gameHubContext.Clients.All.SendAsync("PlayerJoined", playerName);
         }
     }
 }

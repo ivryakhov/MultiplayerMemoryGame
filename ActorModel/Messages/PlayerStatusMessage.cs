@@ -1,7 +1,7 @@
 ﻿using System;
 namespace ActorModel.Messages
 {
-    class PlayerStatusMessage
+    class PlayerStatusMessage : IActorMessage
     {
         public string PlayerName { get; private set; }
 

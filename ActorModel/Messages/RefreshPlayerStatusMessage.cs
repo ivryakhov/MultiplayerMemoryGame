@@ -1,6 +1,6 @@
 ﻿namespace ActorModel.Messages
 {
-    public class RefreshPlayerStatusMessage
+    public class RefreshPlayerStatusMessage : IActorMessage
     {
     }
 }

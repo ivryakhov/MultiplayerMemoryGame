@@ -1,21 +1,26 @@
-﻿using ActorModel.Actors;
-using ActorModel.Messages;
-using Akka.Actor;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
+using System;
+using System.Threading.Tasks;
 
 namespace MultiplayerMemoryGame.Models
 {
     public class GameHub : Hub
     {
-        private readonly IActorRef _signalRBridge;
+      //  private readonly ISignalRBridgeActorInstance _signalRBridge;
 
-        public GameHub(SignalRBridgeActorProvider signalRBridge)
-        {
-            _signalRBridge = signalRBridge();
-        }
+        //public GameHub(ISignalRBridgeActorInstance signalRBridge)
+        //{
+        //    _signalRBridge = signalRBridge;
+        //}
         public void JoinGame(string playerName)
         {
-            _signalRBridge.Tell(new JoinGameMessage(playerName));
+            //_signalRBridge.Tell(new JoinGameMessage(playerName));
+            Console.WriteLine("echo");
+        }
+
+        public async Task NewMessage(long username, string message)
+        {
+            await Clients.All.SendAsync("messageReceived", username, message);
         }
     }
 }

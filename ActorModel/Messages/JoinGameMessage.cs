@@ -1,6 +1,6 @@
 ﻿namespace ActorModel.Messages
 {
-    public class JoinGameMessage
+    public class JoinGameMessage : IActorMessage
     {
         public string PlayerName { get; private set; }
         public JoinGameMessage(string playerName)

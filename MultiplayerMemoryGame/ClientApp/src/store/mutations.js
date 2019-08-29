@@ -8,8 +8,16 @@ export const PROCESS_CARD_CLICK = `PROCESS_CARD_CLICK`;
 export const REQUEST_COMPARE_CARDS = `REQUEST_COMPARE_CARDS`;
 export const COMPARE_CARDS = `COMPARE_CARDS`;
 
+export const JOIN_PLAYER = `JOIN_PLAYER`;
+export const PLAYER_JOINED = `PLAYER_JOINED`;   
+
 export const processCardClick = (name, index) => ({
     type: PROCESS_CARD_CLICK,
     name: name,
     index: index
+});
+
+export const requestJoinPlayer = (playerName) => ({
+    type: JOIN_PLAYER,
+    name: playerName
 });

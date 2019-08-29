@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using ActorModel.Actors;
 using MultiplayerMemoryGame.Models;
 using Microsoft.AspNetCore.SignalR;
+using ActorModel.Actors.ActorInstances;
+using ActorModel.ExternalSystems;
 
 namespace MultiplayerMemoryGame
 {
@@ -24,7 +26,7 @@ namespace MultiplayerMemoryGame
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -32,26 +34,30 @@ namespace MultiplayerMemoryGame
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddSingleton(_ => ActorSystem.Create("MemoryGameSystem", ConfigurationLoader.Load()));
+            //var actorSystem = ActorSystem.Create("MemoryGameSystem", ConfigurationLoader.Load());
+            //services.AddSingleton<ActorSystem>(actorSystem);
 
-            services.AddSingleton<GameControllerActorProvider>(provider =>
-            {
-                var actorSystem = provider.GetService<ActorSystem>();
-                var gameControllerActor = actorSystem.ActorOf(Props.Create(() => new GameControllerActor()));
-                return () => gameControllerActor;
-            });
+            //services.AddSingleton(typeof(ActorSystem), (serviceProvider) => actorSystem);
 
-            services.AddSingleton<SignalRBridgeActorProvider>(provider =>
-            {
-                var actorSystem = provider.GetService<ActorSystem>();
-                var gameControllerActorProvider = provider.GetService<GameControllerActorProvider>();
-                var hubContext = provider.GetService<IHubContext<GameHub>>();
-                var signalRBridgeActor = actorSystem.ActorOf(Props.Create(
-                    () => new SignalRBridgeActor(new SignalRGameEventsPusher(hubContext), gameControllerActorProvider)
-                    ));
-                return () => signalRBridgeActor;
-            });
+            //var gameController = new GameControllerActorInstance(actorSystem);
 
+            //services.AddSingleton<IGameControllerActorInstance>(new GameControllerActorInstance(ActorSystem.Create("MemoryGameSystem", ConfigurationLoader.Load())));
+            //services.AddSingleton(typeof(IGameControllerActorInstance), (provider) => gameController);
+
+            //services.AddSingleton<IGameEventsPusher, SignalRGameEventsPusher>();
+
+            //services.AddSingleton<ISignalRBridgeActorInstance, SignalRBridgeActorInstance>();
+
+            //services.AddSingleton(typeof(ISignalRBridgeActorInstance), (provider) =>
+            //{
+            //    var hubContext = provider.GetService<IHubContext<GameHub>>();
+            //    var signalRBridgeActorInstance = new SignalRBridgeActorInstance(actorSystem, new SignalRGameEventsPusher(hubContext), gameController);
+               
+            //    return signalRBridgeActorInstance;
+            //});
+               
+
+            
             services.AddSignalR();
         }
 
@@ -66,11 +72,12 @@ namespace MultiplayerMemoryGame
             {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
-            }
+            }           
+            
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+         //   app.UseSpaStaticFiles();
 
             app.UseSpa(spa =>
             {
@@ -82,21 +89,32 @@ namespace MultiplayerMemoryGame
                 }
             });
 
-            lifetime.ApplicationStarted.Register(() =>
-            {
-                app.ApplicationServices.GetService<ActorSystem>();
-            });
+            ////lifetime.ApplicationStarted.Register(() =>
+            ////{
+            ////    app.ApplicationServices.GetService<ActorSystem>();
+            ////});
 
-            lifetime.ApplicationStopping.Register(() =>
-            {
-                app.ApplicationServices.GetService<ActorSystem>().Terminate().Wait();
+            ////lifetime.ApplicationStopping.Register(() =>
+            ////{
+            ////    app.ApplicationServices.GetService<ActorSystem>().Terminate().Wait();
+            ////});
+
+            //app.Use(async (context, next) =>
+            //{
+            //    var hubContext = context.RequestServices
+            //});
+            app.UseCors(builder => {
+                builder.AllowAnyMethod()
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
             });
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<GameHub>("/game");
+                routes.MapHub<GameHub>("/gameHub");
             });
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc();
         }
     }
 }

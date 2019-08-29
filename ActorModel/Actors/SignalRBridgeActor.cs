@@ -1,18 +1,19 @@
 ﻿using Akka.Actor;
 using ActorModel.Messages;
 using ActorModel.ExternalSystems;
+using ActorModel.Actors.ActorInstances;
 
 namespace ActorModel.Actors
 {
     public class SignalRBridgeActor : ReceiveActor
     {
         private readonly IGameEventsPusher _gameEventPusher;
-        private readonly IActorRef _gameController;
+        private readonly IGameControllerActorInstance _gameController;
 
-        public SignalRBridgeActor(IGameEventsPusher gameEventPusher, GameControllerActorProvider gameControllerActorProvider)
+        public SignalRBridgeActor(IGameEventsPusher gameEventPusher, IGameControllerActorInstance gameControllerActorInstance)
         {
             _gameEventPusher = gameEventPusher;
-            _gameController = gameControllerActorProvider();
+            _gameController = gameControllerActorInstance;
 
 
             Receive<JoinGameMessage>(
