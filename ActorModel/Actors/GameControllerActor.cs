@@ -23,10 +23,7 @@ namespace ActorModel.Actors
 
             _players.Add(message.PlayerName, newPlayerActor);
 
-            foreach(var player in _players.Values)
-            {
-                player.Tell(new RefreshPlayerStatusMessage(), Sender);
-            }
+            Sender.Tell(new PlayerJoinedMessage(message.PlayerName));
         }
     }
 }

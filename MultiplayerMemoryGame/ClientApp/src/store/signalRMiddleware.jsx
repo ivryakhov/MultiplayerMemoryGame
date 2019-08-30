@@ -4,15 +4,12 @@ import * as mutations from './mutations';
 let connection;
 
 const setupConnection = (store) => {
-   const connection = new signalR.HubConnectionBuilder()
+    const connection = new signalR.HubConnectionBuilder()
         .withUrl("/gameHub")
-        .build();
-    connection.start().catch(err => document.write(err));
-
+        .build();    
     
     connection.on('PlayerJoined', data => {
-        store.dispatch({ type: mutations.PLAYER_JOINED, name: data.name });
-        console.log("Player dispatched");
+        store.dispatch({ type: mutations.PLAYER_JOINED, name: data });        
     });
 
     connection.start().catch(err => document.write(err));
@@ -22,13 +19,12 @@ const setupConnection = (store) => {
 
 
 export function signalRInvokeMiddleware(store) {
-   
+    if (!connection) {
         connection = setupConnection(store);
-  
+    }
     return (next) => async (action) => {       
             switch (action.type) {
-                case mutations.JOIN_PLAYER:
-                    console.log("Join player ", action.name);
+                case mutations.JOIN_PLAYER:                    
                     connection.invoke('JoinGame', action.name);
                     break;
                 default:

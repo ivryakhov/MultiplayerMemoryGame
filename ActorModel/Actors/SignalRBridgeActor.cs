@@ -23,7 +23,7 @@ namespace ActorModel.Actors
                     _gameController.Tell(message);
                 });
 
-            Receive<PlayerStatusMessage>(
+            Receive<PlayerJoinedMessage>(
                 message =>
                 {
                     _gameEventPusher.PlayerJoined(message.PlayerName);

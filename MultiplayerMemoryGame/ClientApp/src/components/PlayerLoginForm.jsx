@@ -6,14 +6,33 @@ import { connect } from "react-redux";
 const PlayerLoginForm = ({ joinPlayer }) => (
     <div>
         <form onSubmit={joinPlayer}>
-            <input type="text" name="playerName" autoComplete="off" placeholder="Enter your name to join" />
-            <button type="submit">Join</button>
+            <div className="field">
+                <p className="control">
+                <input type="text"
+                    name="playerName"
+                    autoComplete="off"
+                    className="input is-medium is-primary"
+                    placeholder="Enter your name to join"
+                />
+                </p>
+            </div>
+            <div className="field">
+                <p className="control">
+                    <button type="submit"
+                        className="button is-medium is-primary"
+                    >
+                        Join
+                    </button>
+                </p>
+            </div>
         </form>
     </div>
 );
 
 const mapStateToProps = (state) => {
-    return {};
+    return {
+        currentPLayer: state.reducer.currentPLayer
+    };
 };
 
 const mapDispatchToProps = (dispatch) => ({

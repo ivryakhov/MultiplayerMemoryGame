@@ -13,7 +13,10 @@ let defaultState = {
         openedCards: [],
         turnState: mutations.BEGIN_TURN
     },
-    players: ['Player1', 'Player2']
+    players: [],
+    currentPlayer: {
+        isJoined: false
+    }
 };
 
 export const reducer = combineReducers({
@@ -26,6 +29,14 @@ export const reducer = combineReducers({
                 return compareCards(boardState);            
             default:
                 return boardState;
+        }        
+    },
+    players: (players = defaultState.players, action) => {
+        switch(action.type) {
+            case mutations.PLAYER_JOINED: 
+                return [...players, { name: action.name }];
+            default:
+                return players;
         }        
     }
 });
@@ -46,7 +57,6 @@ function compareCards(boardState) {
         case mutations.TWO_CARDS_OPENED:
         {
                 var newCards = boardState.cards;
-                var timeOut = 0;
             const openedCards = boardState.openedCards;
 
             if (opendedCardsAreEqual(openedCards)) {

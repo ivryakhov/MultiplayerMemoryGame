@@ -1,13 +1,15 @@
 ﻿import React from 'react';
 import { ConnectedGameBoard } from './components/GameBoard';
 import { ConnectedPlayerLoginForm } from './components/PlayerLoginForm';
+import { ConnectedPLayersList } from './components/PlayersList';
 
 export const App = () => (
             <div className="app">
                 <div className="tile is-ancestor">
                     <div className="tile is-3 is-vertical is-parent">
                         <div className="tile is-child box">
-                            <ConnectedPlayerLoginForm/>
+                            <ConnectedPlayerLoginForm />
+                            <ConnectedPLayersList />
                         </div>
                         <div className="tile is-child box">
                             <p className="title">Opponent's score:</p>

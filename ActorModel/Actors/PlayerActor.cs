@@ -15,7 +15,7 @@ namespace ActorModel.Actors
                 message =>
                 {
                     Sender.Tell(new PlayerStatusMessage(_playerName));
-                });
+                });            
         }
     }
 }
