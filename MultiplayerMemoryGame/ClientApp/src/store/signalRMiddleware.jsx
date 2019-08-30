@@ -4,18 +4,18 @@ import * as mutations from './mutations';
 let connection;
 
 const setupConnection = (store) => {
-    const connection = new signalR.HubConnectionBuilder()
+   const connection = new signalR.HubConnectionBuilder()
         .withUrl("/gameHub")
         .build();
     connection.start().catch(err => document.write(err));
 
     
-    //conn.on('PlayerJoined', data => {
-    //    store.dispatch({ type: mutations.PLAYER_JOINED, name: data.name });
-    //    console.log("Player dispatched");
-    //});
+    connection.on('PlayerJoined', data => {
+        store.dispatch({ type: mutations.PLAYER_JOINED, name: data.name });
+        console.log("Player dispatched");
+    });
 
-    //conn.start().catch(function (err) { return console.error(err.toString()); });
+    connection.start().catch(err => document.write(err));
 
     return connection;
 };

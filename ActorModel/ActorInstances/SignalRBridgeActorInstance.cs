@@ -6,7 +6,7 @@ namespace ActorModel.Actors.ActorInstances
 {
     public class SignalRBridgeActorInstance : ISignalRBridgeActorInstance
     {
-        private IActorRef _actor;
+        private readonly IActorRef _actor;
 
         public SignalRBridgeActorInstance(ActorSystem actorSystem, IGameEventsPusher gameEventPusher, IGameControllerActorInstance gameControllerActorInstance)
         {

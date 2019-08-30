@@ -10,7 +10,8 @@ namespace ActorModel.Actors
         private readonly IGameEventsPusher _gameEventPusher;
         private readonly IGameControllerActorInstance _gameController;
 
-        public SignalRBridgeActor(IGameEventsPusher gameEventPusher, IGameControllerActorInstance gameControllerActorInstance)
+        public SignalRBridgeActor(IGameEventsPusher gameEventPusher,
+                                  IGameControllerActorInstance gameControllerActorInstance)
         {
             _gameEventPusher = gameEventPusher;
             _gameController = gameControllerActorInstance;

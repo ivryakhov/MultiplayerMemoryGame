@@ -1,5 +1,4 @@
-﻿using System;
-namespace ActorModel.Messages
+﻿namespace ActorModel.Messages
 {
     class PlayerStatusMessage : IActorMessage
     {

@@ -1,12 +1,11 @@
-﻿using ActorModel.Actors;
-using ActorModel.Messages;
+﻿using ActorModel.Messages;
 using Akka.Actor;
 
 namespace ActorModel.Actors.ActorInstances
 {
     public class GameControllerActorInstance : IGameControllerActorInstance
     {
-        private IActorRef _actor;
+        private readonly IActorRef _actor;
 
         public GameControllerActorInstance(ActorSystem actorSystem)
         {

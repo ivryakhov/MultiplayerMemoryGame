@@ -34,30 +34,15 @@ namespace MultiplayerMemoryGame
                 configuration.RootPath = "ClientApp/build";
             });
 
-            //var actorSystem = ActorSystem.Create("MemoryGameSystem", ConfigurationLoader.Load());
-            //services.AddSingleton<ActorSystem>(actorSystem);
+            var actorSystem = ActorSystem.Create("MemoryGameSystem", ConfigurationLoader.Load());
+            services.AddSingleton<ActorSystem>(actorSystem);
 
-            //services.AddSingleton(typeof(ActorSystem), (serviceProvider) => actorSystem);
+            services.AddSingleton<IGameControllerActorInstance, GameControllerActorInstance>();
 
-            //var gameController = new GameControllerActorInstance(actorSystem);
+            services.AddSingleton<IGameEventsPusher, SignalRGameEventsPusher>();
 
-            //services.AddSingleton<IGameControllerActorInstance>(new GameControllerActorInstance(ActorSystem.Create("MemoryGameSystem", ConfigurationLoader.Load())));
-            //services.AddSingleton(typeof(IGameControllerActorInstance), (provider) => gameController);
+            services.AddSingleton<ISignalRBridgeActorInstance, SignalRBridgeActorInstance>();
 
-            //services.AddSingleton<IGameEventsPusher, SignalRGameEventsPusher>();
-
-            //services.AddSingleton<ISignalRBridgeActorInstance, SignalRBridgeActorInstance>();
-
-            //services.AddSingleton(typeof(ISignalRBridgeActorInstance), (provider) =>
-            //{
-            //    var hubContext = provider.GetService<IHubContext<GameHub>>();
-            //    var signalRBridgeActorInstance = new SignalRBridgeActorInstance(actorSystem, new SignalRGameEventsPusher(hubContext), gameController);
-               
-            //    return signalRBridgeActorInstance;
-            //});
-               
-
-            
             services.AddSignalR();
         }
 
@@ -72,8 +57,13 @@ namespace MultiplayerMemoryGame
             {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
-            }           
-            
+            }
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<GameHub>("/gameHub");
+            });
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -89,31 +79,16 @@ namespace MultiplayerMemoryGame
                 }
             });
 
-            ////lifetime.ApplicationStarted.Register(() =>
-            ////{
-            ////    app.ApplicationServices.GetService<ActorSystem>();
-            ////});
-
-            ////lifetime.ApplicationStopping.Register(() =>
-            ////{
-            ////    app.ApplicationServices.GetService<ActorSystem>().Terminate().Wait();
-            ////});
-
-            //app.Use(async (context, next) =>
-            //{
-            //    var hubContext = context.RequestServices
-            //});
-            app.UseCors(builder => {
-                builder.AllowAnyMethod()
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
-            });
-
-            app.UseSignalR(routes =>
+            lifetime.ApplicationStarted.Register(() =>
             {
-                routes.MapHub<GameHub>("/gameHub");
+                app.ApplicationServices.GetService<ActorSystem>();
             });
+
+            lifetime.ApplicationStopping.Register(() =>
+            {
+                app.ApplicationServices.GetService<ActorSystem>().Terminate().Wait();
+            });      
+
             app.UseMvc();
         }
     }
