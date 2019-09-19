@@ -1,5 +1,6 @@
 ﻿using ActorModel.ExternalSystems;
 using Microsoft.AspNetCore.SignalR;
+using System.Collections.Generic;
 
 namespace MultiplayerMemoryGame.Models
 {
@@ -15,6 +16,11 @@ namespace MultiplayerMemoryGame.Models
         public void PlayerJoined(string playerName)
         {
             _gameHubContext.Clients.All.SendAsync("PlayerJoined", playerName);
+        }
+
+        public void PlayersListProvided(IList<string> players, string connectionId)
+        {
+            _gameHubContext.Clients.Client(connectionId).SendAsync("PlayersListProvided", players);
         }
     }
 }

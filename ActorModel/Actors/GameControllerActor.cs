@@ -1,6 +1,7 @@
 ﻿using Akka.Actor;
 using System.Collections.Generic;
 using ActorModel.Messages;
+using System.Linq;
 
 namespace ActorModel.Actors
 {
@@ -13,6 +14,7 @@ namespace ActorModel.Actors
             _players = new Dictionary<string, IActorRef>();
 
             Receive<JoinGameMessage>(message => JoinGame(message));
+            Receive<RequestPlayersListMessage>((message) => GetPlayersList(message));
         }
 
         private void JoinGame(JoinGameMessage message)
@@ -24,6 +26,12 @@ namespace ActorModel.Actors
             _players.Add(message.PlayerName, newPlayerActor);
 
             Sender.Tell(new PlayerJoinedMessage(message.PlayerName));
+        }
+
+        private void GetPlayersList(RequestPlayersListMessage message)
+        {
+            var players = _players.Keys.ToList();
+            Sender.Tell(new PlayersListProvidedMessage(players, message.ConnectionId));
         }
     }
 }

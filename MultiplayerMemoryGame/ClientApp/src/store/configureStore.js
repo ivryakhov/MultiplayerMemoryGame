@@ -1,5 +1,5 @@
 ﻿import { applyMiddleware, compose, createStore } from 'redux';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
+import { connectRouter , routerMiddleware } from 'connected-react-router';
 import { reducer } from './reducer';
 import { install, combineReducers } from 'redux-loop';
 import { signalRInvokeMiddleware } from './signalRMiddleware';
@@ -13,7 +13,7 @@ export default function configureStore(history, initialState) {
 
     const rootReducer = combineReducers({
         reducer,
-        routing: routerReducer
+        router: connectRouter(history)
     });
 
     // In development, use the browser's Redux dev tools extension if installed

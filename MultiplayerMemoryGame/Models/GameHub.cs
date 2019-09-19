@@ -1,7 +1,6 @@
 ﻿using ActorModel.Actors.ActorInstances;
 using ActorModel.Messages;
 using Microsoft.AspNetCore.SignalR;
-using System;
 using System.Threading.Tasks;
 
 namespace MultiplayerMemoryGame.Models
@@ -17,6 +16,17 @@ namespace MultiplayerMemoryGame.Models
         public void JoinGame(string playerName)
         {
             _signalRBridge.Tell(new JoinGameMessage(playerName));            
+        }
+
+        public void RequestPLayersList()
+        {
+            _signalRBridge.Tell(new RequestPlayersListMessage(Context.ConnectionId));
+        }
+
+        public override Task OnConnectedAsync()
+        {
+            _signalRBridge.Tell(new RequestPlayersListMessage(Context.ConnectionId));
+            return base.OnConnectedAsync();
         }
     }
 }

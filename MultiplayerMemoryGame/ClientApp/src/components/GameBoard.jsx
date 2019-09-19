@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { Card } from "./Card";
 import styles from "./GameBoardStyles";
-import { processCardClick, requestCompareCards } from "../store/mutations";
+import { processCardClick } from "../store/mutations";
 import { connect } from "react-redux";
 
 export const GameBoard = ({ board, handleClickOnCard }) => (

@@ -12,6 +12,10 @@ const setupConnection = (store) => {
         store.dispatch({ type: mutations.PLAYER_JOINED, name: data });        
     });
 
+    connection.on('PlayersListProvided', data => {
+        store.dispatch({ type: mutations.PLAYERS_LIST_PROVIDED, players: data });
+    });
+
     connection.start().catch(err => document.write(err));
 
     return connection;
@@ -24,8 +28,17 @@ export function signalRInvokeMiddleware(store) {
     }
     return (next) => async (action) => {       
             switch (action.type) {
-                case mutations.JOIN_PLAYER:                    
+                case mutations.JOIN_PLAYER:
+                    if (!connection) {
+                        connection = setupConnection(store);
+                    }
                     connection.invoke('JoinGame', action.name);
+                    break;
+                case mutations.REQUEST_PLAYERS_LIST:
+                    if (!connection) {
+                        connection = setupConnection(store);
+                    }
+                    connection.invoke('RequestPlayersList');
                     break;
                 default:
                     break;

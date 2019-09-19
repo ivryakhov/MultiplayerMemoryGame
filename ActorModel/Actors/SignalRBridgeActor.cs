@@ -28,6 +28,18 @@ namespace ActorModel.Actors
                 {
                     _gameEventPusher.PlayerJoined(message.PlayerName);
                 });
+            Receive<RequestPlayersListMessage>(
+                message =>
+                {
+                    _gameController.Tell(message);
+                }
+            );
+            Receive<PlayersListProvidedMessage>(
+                message =>
+                {
+                    _gameEventPusher.PlayersListProvided(message.PlayersList, message.ConnectionId);
+                }
+            );
         }
     }
 }

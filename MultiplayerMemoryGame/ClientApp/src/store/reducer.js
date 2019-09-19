@@ -35,6 +35,8 @@ export const reducer = combineReducers({
         switch(action.type) {
             case mutations.PLAYER_JOINED: 
                 return [...players, { name: action.name }];
+            case mutations.PLAYERS_LIST_PROVIDED:
+                return action.players.map((player) => { return { name: player }; });
             default:
                 return players;
         }        
@@ -56,15 +58,16 @@ function compareCards(boardState) {
     switch (boardState.turnState) {
         case mutations.TWO_CARDS_OPENED:
         {
-                var newCards = boardState.cards;
+            var newCards = boardState.cards;
             const openedCards = boardState.openedCards;
 
             if (opendedCardsAreEqual(openedCards)) {
-                openedCards.map(({ name, index }) => (
-                    newCards[index].matched = true));
+                openedCards.forEach(({ name, index }) =>
+                    newCards[index].matched = true);                   
+                
             }
             else {
-                openedCards.map(({ name, index }) => {                    
+                openedCards.forEach(({ name, index }) => {                    
                     newCards[index].closed = true;
                     newCards[index].disabled = false;                    
                 });

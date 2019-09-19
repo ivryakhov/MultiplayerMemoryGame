@@ -1,18 +1,20 @@
 ﻿import React from 'react';
 import { connect } from "react-redux";
+import { requestPlayersList } from '../store/mutations';
 
-const PlayerList = ({ players }) => (
-    <div>
-        {
-            players.map((player) => 
-                < div >
-                    <span>{player.name}</span>
-                </div>            
-            )
-        }
-    </div>
-
+const PlayerList = ({ players, getPlayersList }) => {
+    return (
+        <div>
+            {
+                players.map((player,index) =>
+                    < div >
+                        <span>{player.name}</span>
+                    </div>
+                )
+            }
+        </div>
     );
+};
 
 const mapStateToProps = (state) => {
     return {
@@ -20,4 +22,10 @@ const mapStateToProps = (state) => {
     };
 };
 
-export const ConnectedPLayersList = connect(mapStateToProps)(PlayerList);
+const mapDispatchToProps = (dispatch) => ({
+    getPlayersList() {
+        dispatch(requestPlayersList());
+    }
+});
+
+export const ConnectedPLayersList = connect(mapStateToProps, mapDispatchToProps)(PlayerList);
