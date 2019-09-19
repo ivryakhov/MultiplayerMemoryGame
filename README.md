@@ -1,3 +1,3 @@
 # MultiplayerMemoryGame
 
-Demo https://multiplayermemorygame-dev-as.azurewebsites.net/
+Demo https://multiplayermemorygame.azurewebsites.net/
