@@ -28,6 +28,12 @@ namespace ActorModel.Actors
                 {
                     _gameEventPusher.PlayerJoined(message.PlayerName);
                 });
+            Receive<PlayerLoginSuccess>(
+                message =>
+                {
+                    _gameEventPusher.PlayerLoginSuccess(message.PlayerName, message.ConnectionId);
+                }
+            );
             Receive<RequestPlayersListMessage>(
                 message =>
                 {

@@ -16,6 +16,10 @@ const setupConnection = (store) => {
         store.dispatch({ type: mutations.PLAYERS_LIST_PROVIDED, players: data });
     });
 
+    connection.on('PlayerLoginSuccess', data => {
+        store.dispatch({ type: mutations.PLAYER_LOGIN_SUCCESS, playerName: data });
+    })
+
     connection.start().catch(err => document.write(err));
 
     return connection;

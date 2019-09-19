@@ -3,35 +3,41 @@ import * as mutations from '../store/mutations';
 import { connect } from "react-redux";
 
 
-const PlayerLoginForm = ({ joinPlayer }) => (
+const PlayerLoginForm = ({ currentPlayer, joinPlayer }) => (
     <div>
-        <form onSubmit={joinPlayer}>
-            <div className="field">
-                <p className="control">
-                <input type="text"
-                    name="playerName"
-                    autoComplete="off"
-                    className="input is-medium is-primary"
-                    placeholder="Enter your name to join"
-                />
-                </p>
+    {
+        currentPlayer.isJoined === false ?
+            <div>
+                <form onSubmit={joinPlayer}>
+                    <div className="field">
+                        <p className="control">
+                            <input type="text"
+                                name="playerName"
+                                autoComplete="off"
+                                className="input is-medium is-primary"
+                                placeholder="Enter your name to join"
+                            />
+                        </p>
+                    </div>
+                    <div className="field">
+                        <p className="control">
+                            <button type="submit"
+                                className="button is-medium is-primary"
+                            >
+                                Join
+                        </button>
+                        </p>
+                    </div>
+                </form>
             </div>
-            <div className="field">
-                <p className="control">
-                    <button type="submit"
-                        className="button is-medium is-primary"
-                    >
-                        Join
-                    </button>
-                </p>
-            </div>
-        </form>
+        : <div></div>
+        }
     </div>
 );
 
 const mapStateToProps = (state) => {
     return {
-        currentPLayer: state.reducer.currentPLayer
+        currentPlayer: state.reducer.currentPlayer
     };
 };
 

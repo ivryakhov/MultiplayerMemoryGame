@@ -26,6 +26,7 @@ namespace ActorModel.Actors
             _players.Add(message.PlayerName, newPlayerActor);
 
             Sender.Tell(new PlayerJoinedMessage(message.PlayerName));
+            Sender.Tell(new PlayerLoginSuccess(message.PlayerName, message.ConnectionId));
         }
 
         private void GetPlayersList(RequestPlayersListMessage message)

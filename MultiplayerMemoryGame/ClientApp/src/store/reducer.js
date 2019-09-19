@@ -15,7 +15,8 @@ let defaultState = {
     },
     players: [],
     currentPlayer: {
-        isJoined: false
+        isJoined: false,
+        name: ""
     }
 };
 
@@ -40,6 +41,18 @@ export const reducer = combineReducers({
             default:
                 return players;
         }        
+    },
+    currentPlayer: (currentPlayer = defaultState.currentPlayer, action) => {
+        switch (action.type) {
+            case mutations.PLAYER_LOGIN_SUCCESS:
+                return {
+                    ...currentPlayer,
+                    isJoined: true,
+                    name: action.playerName
+                }
+            default:
+                return currentPlayer;
+        }
     }
 });
 

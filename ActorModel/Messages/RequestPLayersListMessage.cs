@@ -2,7 +2,7 @@
 {
     public class RequestPlayersListMessage : IActorMessage
     {
-        public string ConnectionId { get; set; }
+        public string ConnectionId { get; private set; }
 
         public RequestPlayersListMessage(string connectionId)
         {

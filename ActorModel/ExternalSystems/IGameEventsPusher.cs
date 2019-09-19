@@ -6,5 +6,6 @@ namespace ActorModel.ExternalSystems
     {
         void PlayerJoined(string playerName);
         void PlayersListProvided(IList<string> playersList, string connectionId);
+        void PlayerLoginSuccess(string playerName, string connectionId);
     }
 }

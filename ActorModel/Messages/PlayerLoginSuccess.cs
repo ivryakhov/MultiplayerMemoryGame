@@ -1,11 +1,15 @@
-﻿namespace ActorModel.Messages
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ActorModel.Messages
 {
-    public class JoinGameMessage : IActorMessage
+    public class PlayerLoginSuccess : IActorMessage
     {
         public string PlayerName { get; private set; }
         public string ConnectionId { get; private set; }
 
-        public JoinGameMessage(string playerName, string connectionId)
+        public PlayerLoginSuccess(string playerName, string connectionId)
         {
             PlayerName = playerName;
             ConnectionId = connectionId;

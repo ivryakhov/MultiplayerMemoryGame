@@ -15,7 +15,7 @@ namespace MultiplayerMemoryGame.Models
         }
         public void JoinGame(string playerName)
         {
-            _signalRBridge.Tell(new JoinGameMessage(playerName));            
+            _signalRBridge.Tell(new JoinGameMessage(playerName, Context.ConnectionId));            
         }
 
         public void RequestPLayersList()
