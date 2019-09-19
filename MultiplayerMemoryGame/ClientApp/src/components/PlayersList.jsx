@@ -5,6 +5,7 @@ import { requestPlayersList } from '../store/mutations';
 const PlayerList = ({ players, getPlayersList }) => {
     return (
         <div>
+            <p className="is-size-3">Active Players</p>
             {
                 players.map((player,index) =>
                     < div >

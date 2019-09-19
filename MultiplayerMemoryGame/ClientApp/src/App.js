@@ -8,11 +8,11 @@ export const App = () => (
                 <div className="tile is-ancestor">
                     <div className="tile is-3 is-vertical is-parent">
                         <div className="tile is-child box">
-                            <ConnectedPlayerLoginForm />
                             <ConnectedPLayersList />
+                            <ConnectedPlayerLoginForm />
                         </div>
                         <div className="tile is-child box">
-                            <p className="title">Opponent's score:</p>
+                            <p className="is-size-3">Mesage Log</p>  
                         </div>
                     </div>
                     <div className="tile is-parent">

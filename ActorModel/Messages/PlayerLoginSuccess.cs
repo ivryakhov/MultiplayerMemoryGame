@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ActorModel.Messages
+﻿namespace ActorModel.Messages
 {
     public class PlayerLoginSuccess : IActorMessage
     {

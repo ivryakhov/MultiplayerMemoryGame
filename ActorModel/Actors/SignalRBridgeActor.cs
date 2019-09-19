@@ -34,6 +34,12 @@ namespace ActorModel.Actors
                     _gameEventPusher.PlayerLoginSuccess(message.PlayerName, message.ConnectionId);
                 }
             );
+            Receive<PlayerLoginFailed>(
+                message =>
+                {
+                    _gameEventPusher.PlayerLoginFailed(message.ErrorMessage, message.ConnectionId);
+                }
+            );
             Receive<RequestPlayersListMessage>(
                 message =>
                 {
