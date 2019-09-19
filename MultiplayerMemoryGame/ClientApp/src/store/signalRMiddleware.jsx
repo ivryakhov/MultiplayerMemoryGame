@@ -20,6 +20,10 @@ const setupConnection = (store) => {
         store.dispatch({ type: mutations.PLAYER_LOGIN_SUCCESS, playerName: data });
     })
 
+    connection.on('PlayerLoginFailed', data => {
+        store.dispatch({ type: mutations.PLAYER_LOGIN_FAILED, errorMessage: data });
+    })
+
     connection.start().catch(err => document.write(err));
 
     return connection;

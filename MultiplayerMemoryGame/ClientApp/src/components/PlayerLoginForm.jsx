@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 
 const PlayerLoginForm = ({ currentPlayer, joinPlayer }) => (
-    <div>
+    <div className="footer">
     {
         currentPlayer.isJoined === false ?
             <div>
@@ -31,6 +31,10 @@ const PlayerLoginForm = ({ currentPlayer, joinPlayer }) => (
                 </form>
             </div>
         : <div></div>
+        }
+        { currentPlayer.errorMessage !== "" ?
+            <div className="notification is-danger">{currentPlayer.errorMessage}</div>
+            : null
         }
     </div>
 );

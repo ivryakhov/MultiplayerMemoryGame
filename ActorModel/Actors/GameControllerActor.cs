@@ -19,14 +19,21 @@ namespace ActorModel.Actors
 
         private void JoinGame(JoinGameMessage message)
         {
-            IActorRef newPlayerActor =
-                Context.ActorOf(
-                    Props.Create(() => new PlayerActor(message.PlayerName)), message.PlayerName);
+            if (_players.Keys.Contains(message.PlayerName))
+            {
+                Sender.Tell(new PlayerLoginFailed("Player with this name is already joined", message.ConnectionId));
+            }
+            else
+            {
+                IActorRef newPlayerActor =
+                    Context.ActorOf(
+                        Props.Create(() => new PlayerActor(message.PlayerName)), message.PlayerName);
 
-            _players.Add(message.PlayerName, newPlayerActor);
+                _players.Add(message.PlayerName, newPlayerActor);
 
-            Sender.Tell(new PlayerJoinedMessage(message.PlayerName));
-            Sender.Tell(new PlayerLoginSuccess(message.PlayerName, message.ConnectionId));
+                Sender.Tell(new PlayerJoinedMessage(message.PlayerName));
+                Sender.Tell(new PlayerLoginSuccess(message.PlayerName, message.ConnectionId));
+            }
         }
 
         private void GetPlayersList(RequestPlayersListMessage message)

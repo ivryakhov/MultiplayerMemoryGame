@@ -16,7 +16,8 @@ let defaultState = {
     players: [],
     currentPlayer: {
         isJoined: false,
-        name: ""
+        name: "",
+        errorMessage: ""
     }
 };
 
@@ -48,7 +49,14 @@ export const reducer = combineReducers({
                 return {
                     ...currentPlayer,
                     isJoined: true,
-                    name: action.playerName
+                    name: action.playerName,
+                    errorMessage: ""
+                }
+            case mutations.PLAYER_LOGIN_FAILED:
+                return {
+                    ...currentPlayer,
+                    isJoined: false,
+                    errorMessage: action.errorMessage
                 }
             default:
                 return currentPlayer;
