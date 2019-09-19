@@ -1,16 +1,4 @@
 {
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "dependencies": {
     "@aspnet/signalr": "3.0.0-preview6.19307.2",
     "bootstrap": "^3.4.1",
@@ -26,6 +14,19 @@
     "redux-loop": "^5.0.1",
     "rimraf": "^2.7.1"
   },
+  "devDependencies": {
+    "ajv": "^6.0.0",
+    "babel-eslint": "10.0.2",
+    "cross-env": "^5.2.0",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-plugin-flowtype": "^2.50.3",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.11.1"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
   "name": "multiplayer-memory-game",
   "private": true,
   "scripts": {
@@ -34,5 +35,17 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
