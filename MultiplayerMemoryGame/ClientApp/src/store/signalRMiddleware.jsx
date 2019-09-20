@@ -48,6 +48,8 @@ export function signalRInvokeMiddleware(store) {
                     }
                     connection.invoke('RequestPlayersList');
                     break;
+                case mutations.REQUEST_LEAVE_GAME:
+                    connection.invoke('RequestLeaveGame');
                 default:
                     break;
             }

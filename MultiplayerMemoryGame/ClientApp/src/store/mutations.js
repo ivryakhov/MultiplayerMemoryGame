@@ -12,7 +12,11 @@ export const JOIN_PLAYER = `JOIN_PLAYER`;
 export const PLAYER_JOINED = `PLAYER_JOINED`;
 export const PLAYER_LOGIN_SUCCESS = `PLAYER_LOGIN_SUCCESS`;
 export const PLAYER_LOGIN_FAILED = `PLAYER_LOGIN_FAILED`;
+export const REQUEST_LEAVE_GAME = `REQUEST_LEAVE_GAME`;
 
+export const LOGGEDIN = `LOGGEDIN`
+export const LOGGING = `LOGGING`
+export const LOGGEDOUT = `LOGGEDOUT`
 
 export const REQUEST_PLAYERS_LIST = `REQUEST_PLAYERS_LIST`;
 export const PLAYERS_LIST_PROVIDED = `PLAYERS_LIST_PROVIDED`;
@@ -31,3 +35,7 @@ export const requestJoinPlayer = (playerName) => ({
 export const requestPlayersList = () => ({
     type: REQUEST_PLAYERS_LIST
 });
+
+export const requestLeaveGame = () => ({
+    type: REQUEST_LEAVE_GAME
+})
