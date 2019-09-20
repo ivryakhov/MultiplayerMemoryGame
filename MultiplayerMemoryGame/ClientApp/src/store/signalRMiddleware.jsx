@@ -55,6 +55,9 @@ export function signalRInvokeMiddleware(store) {
                 case mutations.REQUEST_LEAVE_GAME:
                     connection.invoke('RequestLeaveGame');
                     break;
+                case mutations.PROCESS_CARD_CLICK:
+                    connection.invoke('ProcessCardClick', action.index);
+                    break;
                 default:
                     break;
             }

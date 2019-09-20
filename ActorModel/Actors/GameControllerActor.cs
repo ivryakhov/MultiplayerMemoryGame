@@ -19,6 +19,7 @@ namespace ActorModel.Actors
             Receive<JoinGameMessage>(message => JoinGame(message));
             Receive<RequestPlayersListMessage>(message => GetPlayersList(message));
             Receive<RequestBoardStateMessage>(message => RequestBoardState(message));
+            Receive<ProcessCardClickMessage>(message => ProcessCardClick(message));
         }
 
         private void JoinGame(JoinGameMessage message)
@@ -53,6 +54,12 @@ namespace ActorModel.Actors
         private void RequestBoardState(RequestBoardStateMessage message)
         {
             Sender.Tell(new BoardStateProvidedMessage(_board, message.ConnectionId));
+        }
+
+        private void ProcessCardClick(ProcessCardClickMessage message)
+        {
+            _board.ProcessCardClick(message.Index);
+            Sender.Tell(new BroadcastBoardStateMessage(_board));
         }
     }
 }

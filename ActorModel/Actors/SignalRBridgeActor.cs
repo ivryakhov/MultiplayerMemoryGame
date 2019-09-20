@@ -64,6 +64,18 @@ namespace ActorModel.Actors
                     _gameEventPusher.BoardStateProvided(message.Board, message.ConnectionId);
                 }
             );
+            Receive<ProcessCardClickMessage>(
+                message =>
+                {
+                    _gameController.Tell(message);
+                }
+            );
+            Receive<BroadcastBoardStateMessage>(
+                message =>
+                {
+                    _gameEventPusher.BroadcastBoardState(message.Board);
+                }
+            );
         }
     }
 }

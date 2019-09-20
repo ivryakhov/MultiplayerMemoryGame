@@ -9,7 +9,7 @@ export const GameBoard = ({ board, handleClickOnCard }) => (
         <div style={styles.playground}>
             {
                 board.cards.map((card, index) => {
-                    return <Card key={index} picture={card.frontValue} click={() => handleClickOnCard(card.frontValue, index)} closed={card.isClosed} disabled={card.isDisabled} matched={card.isMatched} />;
+                    return <Card key={index} picture={card.frontValue} click={() => handleClickOnCard(card.index)} closed={card.isClosed} disabled={card.isDisabled} matched={card.isMatched} />;
                 })
             }
         </div>
@@ -23,8 +23,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    handleClickOnCard(frontValue, index) {
-        dispatch(processCardClick(frontValue, index));        
+    handleClickOnCard(index) {
+        dispatch(processCardClick(index));        
     }
 });
 

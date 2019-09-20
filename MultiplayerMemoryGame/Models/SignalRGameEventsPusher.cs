@@ -38,5 +38,10 @@ namespace MultiplayerMemoryGame.Models
         {
             _gameHubContext.Clients.Client(connectionId).SendAsync("BoardStateProvided", board);
         }
+
+        public void BroadcastBoardState(Board board)
+        {
+            _gameHubContext.Clients.All.SendAsync("BoardStateProvided", board);
+        }
     }
 }
