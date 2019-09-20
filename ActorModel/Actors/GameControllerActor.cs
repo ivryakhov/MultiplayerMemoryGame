@@ -19,7 +19,11 @@ namespace ActorModel.Actors
 
         private void JoinGame(JoinGameMessage message)
         {
-            if (_players.Keys.Contains(message.PlayerName))
+            if (System.String.IsNullOrEmpty(message.PlayerName))
+            {
+                Sender.Tell(new PlayerLoginFailed("The name should not be empty", message.ConnectionId));
+            }
+            else if (_players.Keys.Contains(message.PlayerName))
             {
                 Sender.Tell(new PlayerLoginFailed("Player with this name is already joined", message.ConnectionId));
             }

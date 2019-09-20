@@ -15,7 +15,7 @@ let defaultState = {
     },
     players: [],
     currentPlayer: {
-        isJoined: false,
+        isJoined: mutations.LOGGEDOUT,
         name: "",
         errorMessage: ""
     }
@@ -48,15 +48,20 @@ export const reducer = combineReducers({
             case mutations.PLAYER_LOGIN_SUCCESS:
                 return {
                     ...currentPlayer,
-                    isJoined: true,
+                    isJoined: mutations.LOGGEDIN,
                     name: action.playerName,
                     errorMessage: ""
                 }
             case mutations.PLAYER_LOGIN_FAILED:
                 return {
                     ...currentPlayer,
-                    isJoined: false,
+                    isJoined: mutations.LOGGEDOUT,
                     errorMessage: action.errorMessage
+                }
+            case mutations.JOIN_PLAYER:
+                return {
+                    ...currentPlayer,
+                    isJoined: mutations.LOGGING
                 }
             default:
                 return currentPlayer;
