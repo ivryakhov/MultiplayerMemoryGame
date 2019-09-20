@@ -1,17 +1,10 @@
 ﻿import * as mutations from './mutations';
 import { loop, Cmd, combineReducers } from 'redux-loop';
 
-const names = [
-    'fa-anchor', 'fa-ambulance', 'fa-beer', 'fa-balance-scale', 'fa-bath',
-    'fa-basketball-ball', 'fa-bicycle', 'fa-bone', 'fa-bug', 'fa-bus', 'fa-crown',
-    'fa-crow', 'fa-chess-knight', 'fa-couch', 'fa-coffee'
-];
-
 let defaultState = {
     board: {
-        cards: prepareCards(),
-        openedCards: [],
-        turnState: mutations.BEGIN_TURN
+        cards: [],
+        idexesToPostoponeClosing: []
     },
     players: [],
     currentPlayer: {
@@ -23,12 +16,50 @@ let defaultState = {
 
 export const reducer = combineReducers({
     board:(boardState = defaultState.board, action) => {
-        let { type, name, index } = action;
+        let { type, frontValue, index } = action;
         switch (type) {
-            case mutations.PROCESS_CARD_CLICK:
-                return updateBoardState(boardState, name, index);
-            case mutations.COMPARE_CARDS:                
-                return compareCards(boardState);            
+            case mutations.BOARD_STATE_PROVIDED:
+                if (action.board.idexesToPostoponeClosing.length === 0) {
+                    return {
+                        ...boardState,
+                        cards: action.board.cards,
+                        idexesToPostoponeClosing: action.board.idexesToPostoponeClosing
+                    };
+                }
+                else {
+                    return loop(
+                        {
+                            ...boardState,
+                            cards: action.board.cards.map((card, index) => {
+                                if (card.index === action.board.idexesToPostoponeClosing[0] ||
+                                    card.index === action.board.idexesToPostoponeClosing[1]) {
+                                    card.isClosed = false;
+                                }
+                               // card.isDisabled = true;
+                                return card;
+                            }),
+                            idexesToPostoponeClosing: action.board.idexesToPostoponeClosing
+                        },
+                        Cmd.run(takeATimeout, {
+                            args: [],
+                            successActionCreator: () => ({
+                                type: mutations.CLOSE_POSTPONED_CARDS
+                            })
+                        })
+                    );
+                }
+            case mutations.CLOSE_POSTPONED_CARDS:
+                return {
+                    ...boardState,
+                    cards: boardState.cards.map((card, index) => {
+                        if (card.index === boardState.idexesToPostoponeClosing[0] ||
+                            card.index === boardState.idexesToPostoponeClosing[1]) {
+                            card.isClosed = true;
+                        }
+                        return card;
+                    }),
+                    idexesToPostoponeClosing: []
+                }                
             default:
                 return boardState;
         }        
@@ -69,109 +100,10 @@ export const reducer = combineReducers({
     }
 });
 
-function asyncCompareCards(openedCards) {
+function takeATimeout() {
     return new Promise((resolve, reject) => {
-        var timeout = 0;
-        if (!opendedCardsAreEqual(openedCards))
-            timeout = 1300;
         setTimeout(() => {
             resolve('ok');
-        }, timeout);
+        }, 1300);
     });
-}
-
-function compareCards(boardState) {
-    switch (boardState.turnState) {
-        case mutations.TWO_CARDS_OPENED:
-        {
-            var newCards = boardState.cards;
-            const openedCards = boardState.openedCards;
-
-            if (opendedCardsAreEqual(openedCards)) {
-                openedCards.forEach(({ name, index }) =>
-                    newCards[index].matched = true);                   
-                
-            }
-            else {
-                openedCards.forEach(({ name, index }) => {                    
-                    newCards[index].closed = true;
-                    newCards[index].disabled = false;                    
-                });
-            }
-            return {
-                ...boardState,
-                openedCards: [],
-                cards: newCards,
-                turnState: mutations.BEGIN_TURN
-            };
-        }
-        default:
-            return boardState;
-    }
-}
-
-function opendedCardsAreEqual(openedCards) {
-    return (openedCards[0].name === openedCards[1].name && openedCards[0].index !== openedCards[1].index);
-}
-
-function prepareCards() {
-    const duplicatedNames = names.concat(names);
-    const randomizedNames = shuffle(duplicatedNames);
-    const preparedCards = randomizedNames.map((name, index) => {
-        const card =
-        {
-            name: name,
-            closed: true,
-            disabled: false,
-            matched: false
-        };
-        return card;
-    });
-    return preparedCards;
-}
-
-function shuffle(array) {
-    array.sort((a, b) => Math.random() - 0.5);
-    return array;
-}
-
-function updateBoardState(boardState, name, index) {
-    var newCards = boardState.cards;
-    var newOpenedCards = boardState.openedCards;
-    switch (boardState.turnState) {
-        case mutations.BEGIN_TURN:
-            newCards[index].disabled = true;
-            newCards[index].closed = false;
-            newOpenedCards[0] = { name, index };
-            return {...boardState,
-                turnState: mutations.ONE_CARD_OPENED,
-                openedCards: newOpenedCards,
-                cards: newCards
-            };            
-        case mutations.ONE_CARD_OPENED:
-        {
-            newCards[index].disabled = true;
-            newCards[index].closed = false;
-            newOpenedCards[1] = { name, index };
-            return loop(
-                {
-                    ...boardState,
-                    openedCards: newOpenedCards,
-                    cards: newCards,
-                    turnState: mutations.TWO_CARDS_OPENED
-                },
-                Cmd.run(asyncCompareCards, {
-                    args: [newOpenedCards],
-                    successActionCreator: () => ({
-                        type: mutations.COMPARE_CARDS
-                    })
-                })
-            );
-        }
-        case mutations.TWO_CARDS_OPENED:
-            return boardState;
-
-        default:
-            console.log('Unknown state;');
-    }
 }

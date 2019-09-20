@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiplayerMemoryGame", "MultiplayerMemoryGame\MultiplayerMemoryGame.csproj", "{88739191-1033-4D8F-9491-A7FEEAD61D87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActorModel", "ActorModel\ActorModel.csproj", "{CA5C02A0-67C2-4DC3-A40D-D00264FE21EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActorModel", "ActorModel\ActorModel.csproj", "{CA5C02A0-67C2-4DC3-A40D-D00264FE21EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameModel", "GameModel\GameModel.csproj", "{EE3BC874-3EFA-4A9A-B800-AD77A33DCF64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CA5C02A0-67C2-4DC3-A40D-D00264FE21EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA5C02A0-67C2-4DC3-A40D-D00264FE21EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA5C02A0-67C2-4DC3-A40D-D00264FE21EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE3BC874-3EFA-4A9A-B800-AD77A33DCF64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE3BC874-3EFA-4A9A-B800-AD77A33DCF64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE3BC874-3EFA-4A9A-B800-AD77A33DCF64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE3BC874-3EFA-4A9A-B800-AD77A33DCF64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

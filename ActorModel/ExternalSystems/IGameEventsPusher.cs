@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GameModel;
 
 namespace ActorModel.ExternalSystems
 {
@@ -8,5 +9,7 @@ namespace ActorModel.ExternalSystems
         void PlayersListProvided(IList<string> playersList, string connectionId);
         void PlayerLoginSuccess(string playerName, string connectionId);
         void PlayerLoginFailed(string errorMessage, string connectionId);
+        void BoardStateProvided(Board board, string connectionId);
+        void BroadcastBoardState(Board board);
     }
 }

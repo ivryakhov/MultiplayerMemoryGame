@@ -21,9 +21,11 @@ export const LOGGEDOUT = `LOGGEDOUT`
 export const REQUEST_PLAYERS_LIST = `REQUEST_PLAYERS_LIST`;
 export const PLAYERS_LIST_PROVIDED = `PLAYERS_LIST_PROVIDED`;
 
-export const processCardClick = (name, index) => ({
+export const BOARD_STATE_PROVIDED = `BOARD_STATE_PROVIDED`;
+export const CLOSE_POSTPONED_CARDS = `CLOSE_POSTPONED_CARDS`;
+
+export const processCardClick = (index) => ({
     type: PROCESS_CARD_CLICK,
-    name: name,
     index: index
 });
 
