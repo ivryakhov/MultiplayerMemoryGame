@@ -26,6 +26,7 @@ namespace MultiplayerMemoryGame.Models
         public override Task OnConnectedAsync()
         {
             _signalRBridge.Tell(new RequestPlayersListMessage(Context.ConnectionId));
+            _signalRBridge.Tell(new RequestBoardStateMessage(Context.ConnectionId));
             return base.OnConnectedAsync();
         }
     }

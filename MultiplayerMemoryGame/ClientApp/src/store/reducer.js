@@ -1,15 +1,9 @@
 ﻿import * as mutations from './mutations';
 import { loop, Cmd, combineReducers } from 'redux-loop';
 
-const names = [
-    'fa-anchor', 'fa-ambulance', 'fa-beer', 'fa-balance-scale', 'fa-bath',
-    'fa-basketball-ball', 'fa-bicycle', 'fa-bone', 'fa-bug', 'fa-bus', 'fa-crown',
-    'fa-crow', 'fa-chess-knight', 'fa-couch', 'fa-coffee'
-];
-
 let defaultState = {
     board: {
-        cards: prepareCards(),
+        cards: [],
         openedCards: [],
         turnState: mutations.BEGIN_TURN
     },
@@ -23,12 +17,17 @@ let defaultState = {
 
 export const reducer = combineReducers({
     board:(boardState = defaultState.board, action) => {
-        let { type, name, index } = action;
+        let { type, frontValue, index } = action;
         switch (type) {
             case mutations.PROCESS_CARD_CLICK:
-                return updateBoardState(boardState, name, index);
+                return updateBoardState(boardState, frontValue, index);
             case mutations.COMPARE_CARDS:                
-                return compareCards(boardState);            
+                return compareCards(boardState);    
+            case mutations.BOARD_STATE_PROVIDED:
+                return {
+                    ...boardState,
+                    cards: action.board.cards
+                };
             default:
                 return boardState;
         }        
@@ -88,14 +87,14 @@ function compareCards(boardState) {
             const openedCards = boardState.openedCards;
 
             if (opendedCardsAreEqual(openedCards)) {
-                openedCards.forEach(({ name, index }) =>
-                    newCards[index].matched = true);                   
+                openedCards.forEach(({ frontValue, index }) =>
+                    newCards[index].isMatched = true);                   
                 
             }
             else {
-                openedCards.forEach(({ name, index }) => {                    
-                    newCards[index].closed = true;
-                    newCards[index].disabled = false;                    
+                openedCards.forEach(({ frontValue, index }) => {                    
+                    newCards[index].isClosed = true;
+                    newCards[index].isDisabled = false;                    
                 });
             }
             return {
@@ -111,38 +110,18 @@ function compareCards(boardState) {
 }
 
 function opendedCardsAreEqual(openedCards) {
-    return (openedCards[0].name === openedCards[1].name && openedCards[0].index !== openedCards[1].index);
+    return (openedCards[0].frontValue === openedCards[1].frontValue && openedCards[0].index !== openedCards[1].index);
 }
 
-function prepareCards() {
-    const duplicatedNames = names.concat(names);
-    const randomizedNames = shuffle(duplicatedNames);
-    const preparedCards = randomizedNames.map((name, index) => {
-        const card =
-        {
-            name: name,
-            closed: true,
-            disabled: false,
-            matched: false
-        };
-        return card;
-    });
-    return preparedCards;
-}
 
-function shuffle(array) {
-    array.sort((a, b) => Math.random() - 0.5);
-    return array;
-}
-
-function updateBoardState(boardState, name, index) {
+function updateBoardState(boardState, frontValue, index) {
     var newCards = boardState.cards;
     var newOpenedCards = boardState.openedCards;
     switch (boardState.turnState) {
         case mutations.BEGIN_TURN:
-            newCards[index].disabled = true;
-            newCards[index].closed = false;
-            newOpenedCards[0] = { name, index };
+            newCards[index].isDisabled = true;
+            newCards[index].isClosed = false;
+            newOpenedCards[0] = { frontValue, index };
             return {...boardState,
                 turnState: mutations.ONE_CARD_OPENED,
                 openedCards: newOpenedCards,
@@ -150,9 +129,9 @@ function updateBoardState(boardState, name, index) {
             };            
         case mutations.ONE_CARD_OPENED:
         {
-            newCards[index].disabled = true;
-            newCards[index].closed = false;
-            newOpenedCards[1] = { name, index };
+            newCards[index].isDisabled = true;
+            newCards[index].isClosed = false;
+            newOpenedCards[1] = { frontValue, index };
             return loop(
                 {
                     ...boardState,

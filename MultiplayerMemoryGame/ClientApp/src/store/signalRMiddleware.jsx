@@ -24,6 +24,10 @@ const setupConnection = (store) => {
         store.dispatch({ type: mutations.PLAYER_LOGIN_FAILED, errorMessage: data });
     })
 
+    connection.on('BoardStateProvided', data => {
+        store.dispatch({ type: mutations.BOARD_STATE_PROVIDED, board: data });
+    })
+
     connection.start().catch(err => document.write(err));
 
     return connection;
@@ -50,6 +54,7 @@ export function signalRInvokeMiddleware(store) {
                     break;
                 case mutations.REQUEST_LEAVE_GAME:
                     connection.invoke('RequestLeaveGame');
+                    break;
                 default:
                     break;
             }

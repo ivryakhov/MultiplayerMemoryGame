@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using ActorModel.Messages;
 using System.Linq;
+using GameModel;
 
 namespace ActorModel.Actors
 {
     public class GameControllerActor : ReceiveActor
     {
         private readonly Dictionary<string, IActorRef> _players;
+        private Board _board;
 
         public GameControllerActor()
         {
             _players = new Dictionary<string, IActorRef>();
+            _board = new Board();
 
             Receive<JoinGameMessage>(message => JoinGame(message));
-            Receive<RequestPlayersListMessage>((message) => GetPlayersList(message));
+            Receive<RequestPlayersListMessage>(message => GetPlayersList(message));
+            Receive<RequestBoardStateMessage>(message => RequestBoardState(message));
         }
 
         private void JoinGame(JoinGameMessage message)
@@ -44,6 +48,11 @@ namespace ActorModel.Actors
         {
             var players = _players.Keys.ToList();
             Sender.Tell(new PlayersListProvidedMessage(players, message.ConnectionId));
+        }
+
+        private void RequestBoardState(RequestBoardStateMessage message)
+        {
+            Sender.Tell(new BoardStateProvidedMessage(_board, message.ConnectionId));
         }
     }
 }

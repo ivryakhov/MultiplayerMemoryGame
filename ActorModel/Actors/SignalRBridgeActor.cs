@@ -52,6 +52,18 @@ namespace ActorModel.Actors
                     _gameEventPusher.PlayersListProvided(message.PlayersList, message.ConnectionId);
                 }
             );
+            Receive<RequestBoardStateMessage>(
+                message =>
+                {
+                    _gameController.Tell(message);
+                }
+            );
+            Receive<BoardStateProvidedMessage>(
+                message =>
+                {
+                    _gameEventPusher.BoardStateProvided(message.Board, message.ConnectionId);
+                }
+            );
         }
     }
 }
