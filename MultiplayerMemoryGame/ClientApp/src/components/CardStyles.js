@@ -43,8 +43,7 @@
     opened: {
         transform: 'rotateY(180deg)'
     },
-    matched: {
-        transform: 'rotateY(180deg)',
+    matched: {       
         pointerEvents: 'none'
     },
     mback: {
