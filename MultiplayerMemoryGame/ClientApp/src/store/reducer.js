@@ -16,8 +16,7 @@ let defaultState = {
 
 export const reducer = combineReducers({
     board:(boardState = defaultState.board, action) => {
-        let { type, frontValue, index } = action;
-        switch (type) {
+        switch (action.type) {
             case mutations.BOARD_STATE_PROVIDED:
                 if (action.board.idexesToPostoponeClosing.length === 0) {
                     return {
@@ -35,7 +34,7 @@ export const reducer = combineReducers({
                                     card.index === action.board.idexesToPostoponeClosing[1]) {
                                     card.isClosed = false;
                                 }
-                               // card.isDisabled = true;
+                                card.isDisabled = true;
                                 return card;
                             }),
                             idexesToPostoponeClosing: action.board.idexesToPostoponeClosing
@@ -54,8 +53,9 @@ export const reducer = combineReducers({
                     cards: boardState.cards.map((card, index) => {
                         if (card.index === boardState.idexesToPostoponeClosing[0] ||
                             card.index === boardState.idexesToPostoponeClosing[1]) {
-                            card.isClosed = true;
+                           card.isClosed = true;
                         }
+                        card.isDisabled = false;
                         return card;
                     }),
                     idexesToPostoponeClosing: []
