@@ -24,7 +24,7 @@ namespace ActorModel.Actors
 
         private void JoinGame(JoinGameMessage message)
         {
-            if (System.String.IsNullOrEmpty(message.PlayerName))
+            if (string.IsNullOrEmpty(message.PlayerName))
             {
                 Sender.Tell(new PlayerLoginFailed("The name should not be empty", message.ConnectionId));
             }
@@ -36,7 +36,7 @@ namespace ActorModel.Actors
             {
                 IActorRef newPlayerActor =
                     Context.ActorOf(
-                        Props.Create(() => new PlayerActor(message.PlayerName)), message.PlayerName);
+                        Props.Create(() => new PlayerActor(message.PlayerName, message.ConnectionId)), message.PlayerName);
 
                 _players.Add(message.PlayerName, newPlayerActor);
 
