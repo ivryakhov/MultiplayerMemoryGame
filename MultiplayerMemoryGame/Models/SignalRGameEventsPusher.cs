@@ -24,6 +24,11 @@ namespace MultiplayerMemoryGame.Models
             _gameHubContext.Clients.Client(connectionId).SendAsync("PlayerLoginSuccess", playerName);
         }
 
+        public void PlayerLogoutSuccess(string playerName, string connectionId)
+        {
+            _gameHubContext.Clients.Client(connectionId).SendAsync("PlayerLogoutSuccess", playerName);
+        }
+
         public void PlayerLoginFailed(string errorMessage, string connectionId)
         {
             _gameHubContext.Clients.Client(connectionId).SendAsync("PlayerLoginFailed", errorMessage);

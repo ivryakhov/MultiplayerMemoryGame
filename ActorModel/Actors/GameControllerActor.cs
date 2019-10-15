@@ -8,27 +8,31 @@ namespace ActorModel.Actors
 {
     public class GameControllerActor : ReceiveActor
     {
-        private readonly Dictionary<string, IActorRef> _players;
+        private CircularList<(string, IActorRef)> _players;
         private Board _board;
 
         public GameControllerActor()
         {
-            _players = new Dictionary<string, IActorRef>();
+           // _players = new Dictionary<string, IActorRef>();
+           
+            _players = new CircularList<(string, IActorRef)>();
             _board = new Board();
 
             Receive<JoinGameMessage>(message => JoinGame(message));
+            Receive<ReturnToGameMessage>(message => ReturnToGame(message));
+            Receive<LeaveGameMessage>(message => LeaveGame(message));
             Receive<RequestPlayersListMessage>(message => GetPlayersList(message));
             Receive<RequestBoardStateMessage>(message => RequestBoardState(message));
             Receive<ProcessCardClickMessage>(message => ProcessCardClick(message));
         }
 
         private void JoinGame(JoinGameMessage message)
-        {
+        {            
             if (string.IsNullOrEmpty(message.PlayerName))
             {
                 Sender.Tell(new PlayerLoginFailed("The name should not be empty", message.ConnectionId));
             }
-            else if (_players.Keys.Contains(message.PlayerName))
+            else if (isPlayerExists(message.PlayerName))
             {
                 Sender.Tell(new PlayerLoginFailed("Player with this name is already joined", message.ConnectionId));
             }
@@ -38,16 +42,37 @@ namespace ActorModel.Actors
                     Context.ActorOf(
                         Props.Create(() => new PlayerActor(message.PlayerName, message.ConnectionId)), message.PlayerName);
 
-                _players.Add(message.PlayerName, newPlayerActor);
+                _players.Add((message.PlayerName, newPlayerActor));
 
                 Sender.Tell(new PlayerJoinedMessage(message.PlayerName));
                 Sender.Tell(new PlayerLoginSuccess(message.PlayerName, message.ConnectionId));
             }
         }
 
+        private void ReturnToGame(ReturnToGameMessage message)
+        {
+            if (isPlayerExists(message.PlayerName))
+            {
+                Sender.Tell(new PlayerLoginSuccess(message.PlayerName, message.ConnectionId));
+            }
+            else
+            {
+                Sender.Tell(new PlayerLogoutSuccess(message.PlayerName, message.ConnectionId));
+            }
+        }
+
+        private void LeaveGame(LeaveGameMessage message)
+        {
+            if (isPlayerExists(message.PlayerName))
+            {
+                _players = (CircularList < (string, IActorRef) >) _players.Where(p => p.Item1 != message.PlayerName).ToList();
+                Sender.Tell(new PlayerLogoutSuccess(message.PlayerName, message.ConnectionId));
+            }
+        }
+
         private void GetPlayersList(RequestPlayersListMessage message)
         {
-            var players = _players.Keys.ToList();
+            var players = _players.Select(p => p.Item1).ToList();
             Sender.Tell(new PlayersListProvidedMessage(players, message.ConnectionId));
         }
 
@@ -60,6 +85,11 @@ namespace ActorModel.Actors
         {
             _board.ProcessCardClick(message.Index);
             Sender.Tell(new BroadcastBoardStateMessage(_board));
+        }
+
+        private bool isPlayerExists(string name)
+        {
+            return _players.FirstOrDefault(p => p.Item1 == name) != (null, null);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace GameModel
 {
-    class CircularList<T> : List<T>
+    public class CircularList<T> : List<T>
     {
         private int _currentIndex = 0;
 
