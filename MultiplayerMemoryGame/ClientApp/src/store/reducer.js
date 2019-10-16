@@ -70,6 +70,8 @@ export const reducer = combineReducers({
                 return [...players, { name: action.name }];
             case mutations.PLAYERS_LIST_PROVIDED:
                 return action.players.map((player) => { return { name: player }; });
+            case mutations.PLAYER_LEAVED:
+                return players.filter((player) => { return player.name != action.name });
             default:
                 return players;
         }        
@@ -94,6 +96,8 @@ export const reducer = combineReducers({
                     ...currentPlayer,
                     isJoined: mutations.LOGGING
                 }
+            case mutations.PLAYER_LOGOUT_SUCCESS:
+                return defaultState.currentPlayer;
             default:
                 return currentPlayer;
         }

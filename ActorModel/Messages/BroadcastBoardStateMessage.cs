@@ -2,7 +2,7 @@
 
 namespace ActorModel.Messages
 {
-    public class BroadcastBoardStateMessage : IActorMessage
+    public class BroadcastBoardStateMessage
     {
         public Board Board { get; private set; }
 

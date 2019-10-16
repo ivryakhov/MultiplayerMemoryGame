@@ -4,7 +4,7 @@ import styles from "./GameBoardStyles";
 import { processCardClick } from "../store/mutations";
 import { connect } from "react-redux";
 
-export const GameBoard = ({ board, handleClickOnCard }) => (
+const GameBoard = ({ board, handleClickOnCard }) => (
     <div>
         <div style={styles.playground}>
             {

@@ -18,6 +18,16 @@ namespace MultiplayerMemoryGame.Models
             _signalRBridge.Tell(new JoinGameMessage(playerName, Context.ConnectionId));            
         }
 
+        public void LeaveGame(string playerName)
+        {
+            _signalRBridge.Tell(new LeaveGameMessage(playerName, Context.ConnectionId));
+        }
+
+        public void ReturnToGame(string playerName)
+        {
+            _signalRBridge.Tell(new ReturnToGameMessage(playerName, Context.ConnectionId));
+        }
+
         public void RequestPLayersList()
         {
             _signalRBridge.Tell(new RequestPlayersListMessage(Context.ConnectionId));

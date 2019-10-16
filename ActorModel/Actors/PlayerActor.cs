@@ -6,8 +6,8 @@ namespace ActorModel.Actors
     public class PlayerActor : ReceiveActor
     {
         private readonly string _playerName;
-
-        public PlayerActor(string playerName)
+        
+        public PlayerActor(string playerName, string connectionId)
         {
             _playerName = playerName;
 

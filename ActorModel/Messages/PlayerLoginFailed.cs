@@ -1,6 +1,6 @@
 ﻿namespace ActorModel.Messages
 {
-    public class PlayerLoginFailed : IActorMessage
+    public class PlayerLoginFailed
     {
         public string ErrorMessage { get; private set; }
         public string ConnectionId { get; private set; }

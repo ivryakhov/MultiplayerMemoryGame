@@ -2,7 +2,7 @@
 
 namespace ActorModel.Messages
 {
-    public class PlayersListProvidedMessage : IActorMessage
+    public class PlayersListProvidedMessage
     {
         public IList<string> PlayersList { get; private set; }
         public string ConnectionId { get; private set; }

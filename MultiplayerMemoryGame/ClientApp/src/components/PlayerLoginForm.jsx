@@ -38,7 +38,7 @@ const PlayerLoginForm = ({ currentPlayer, joinPlayer, leaveGame }) => (
                 <button type="submit"
                     className={"button is-medium is-primary" + (currentPlayer.isJoined === mutations.LOGGING ? " is-loading" : "")}
                     disabled={currentPlayer.isJoined === mutations.LOGGING}
-                    onSubmit={leaveGame}
+                    onClick={leaveGame}
                 >
                     Leave Game
                 </button>
@@ -64,8 +64,8 @@ const mapDispatchToProps = (dispatch) => ({
         let playerName = e.target[`playerName`].value;
         dispatch(mutations.requestJoinPlayer(playerName));
     },
-    leaveGame(e) {
-        e.preventDefault();
+    leaveGame() {
+        //e.preventDefault();
         dispatch(mutations.requestLeaveGame());
     }
 });
