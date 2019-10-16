@@ -17,24 +17,13 @@ namespace ActorModel.Actors
             _gameController = gameControllerActorInstance;
 
 
-            Receive<JoinGameMessage>(
+            Receive<IActorMessage>(
                 message =>
                 {
                     _gameController.Tell(message);
                 });
 
-            Receive<ReturnToGameMessage>(
-                message =>
-                {
-                    _gameController.Tell(message);
-                });
-
-            Receive<LeaveGameMessage>(
-                message =>
-                {
-                    _gameController.Tell(message);
-                });
-
+                      
             Receive<PlayerJoinedMessage>(
                 message =>
                 {
@@ -47,6 +36,12 @@ namespace ActorModel.Actors
                     _gameEventPusher.PlayerLoginSuccess(message.PlayerName, message.ConnectionId);
                 });
 
+            Receive<PlayerLeavedMessage>(
+                message =>
+                {
+                    _gameEventPusher.PlayerLeaved(message.PlayerName);
+                });
+
             Receive<PlayerLogoutSuccess>(
                 message =>
                 {
@@ -57,13 +52,7 @@ namespace ActorModel.Actors
                 message =>
                 {
                     _gameEventPusher.PlayerLoginFailed(message.ErrorMessage, message.ConnectionId);
-                });
-
-            Receive<RequestPlayersListMessage>(
-                message =>
-                {
-                    _gameController.Tell(message);
-                });
+                });            
 
             Receive<PlayersListProvidedMessage>(
                 message =>
@@ -71,23 +60,11 @@ namespace ActorModel.Actors
                     _gameEventPusher.PlayersListProvided(message.PlayersList, message.ConnectionId);
                 });
 
-            Receive<RequestBoardStateMessage>(
-                message =>
-                {
-                    _gameController.Tell(message);
-                });
-
             Receive<BoardStateProvidedMessage>(
                 message =>
                 {
                     _gameEventPusher.BoardStateProvided(message.Board, message.ConnectionId);
-                });
-
-            Receive<ProcessCardClickMessage>(
-                message =>
-                {
-                    _gameController.Tell(message);
-                });
+                });                        
 
             Receive<BroadcastBoardStateMessage>(
                 message =>

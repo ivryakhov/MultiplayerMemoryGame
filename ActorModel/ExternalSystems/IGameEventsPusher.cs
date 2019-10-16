@@ -12,5 +12,6 @@ namespace ActorModel.ExternalSystems
         void BoardStateProvided(Board board, string connectionId);
         void BroadcastBoardState(Board board);
         void PlayerLogoutSuccess(string playerName, string connectionId);
+        void PlayerLeaved(string playerName);
     }
 }

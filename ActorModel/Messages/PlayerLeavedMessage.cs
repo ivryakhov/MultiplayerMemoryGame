@@ -1,10 +1,10 @@
 ﻿namespace ActorModel.Messages
-{   
-    public class PlayerJoinedMessage
+{
+    public class PlayerLeavedMessage
     {
         public string PlayerName { get; private set; }
 
-        public PlayerJoinedMessage(string playerName)
+        public PlayerLeavedMessage(string playerName)
         {
             PlayerName = playerName;
         }

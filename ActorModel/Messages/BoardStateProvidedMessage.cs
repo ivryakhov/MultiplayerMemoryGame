@@ -2,7 +2,7 @@
 
 namespace ActorModel.Messages
 {
-    public class BoardStateProvidedMessage : IActorMessage
+    public class BoardStateProvidedMessage
     {
         public Board Board { get; private set; }
         public string ConnectionId { get; private set; }

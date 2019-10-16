@@ -65,8 +65,10 @@ namespace ActorModel.Actors
         {
             if (isPlayerExists(message.PlayerName))
             {
-                _players = (CircularList < (string, IActorRef) >) _players.Where(p => p.Item1 != message.PlayerName).ToList();
+                var playerToDelete = _players.First(p => p.Item1 == message.PlayerName);
+                _players.Remove(playerToDelete);
                 Sender.Tell(new PlayerLogoutSuccess(message.PlayerName, message.ConnectionId));
+                Sender.Tell(new PlayerLeavedMessage(message.PlayerName));
             }
         }
 

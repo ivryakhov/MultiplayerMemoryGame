@@ -1,6 +1,6 @@
 ﻿namespace ActorModel.Messages
 {
-    class PlayerLogoutSuccess : IActorMessage
+    class PlayerLogoutSuccess
     {
         public string PlayerName { get; private set; }
         public string ConnectionId { get; private set; }

@@ -12,6 +12,10 @@ const setupConnection = (store) => {
         store.dispatch({ type: mutations.PLAYER_JOINED, name: data });        
     });
 
+    connection.on('PlayerLeaved', data => {
+        store.dispatch({ type: mutations.PLAYER_LEAVED, name: data });
+    })
+
     connection.on('PlayersListProvided', data => {
         store.dispatch({ type: mutations.PLAYERS_LIST_PROVIDED, players: data });
     });
@@ -21,8 +25,9 @@ const setupConnection = (store) => {
         store.dispatch({ type: mutations.PLAYER_LOGIN_SUCCESS, playerName: data });
     })
 
-    connection.on('PlayerLogoutSuccess', data => {
-        localStorage.removeItem('playerName');        
+    connection.on('PlayerLogoutSuccess', _data => {
+        localStorage.removeItem('playerName');
+        store.dispatch({ type: mutations.PLAYER_LOGOUT_SUCCESS });
     })
 
     connection.on('PlayerLoginFailed', data => {
@@ -65,7 +70,8 @@ export function signalRInvokeMiddleware(store) {
                     connection.invoke('RequestPlayersList');
                     break;
                 case mutations.REQUEST_LEAVE_GAME:
-                    connection.invoke('LeaveGame', store.currentPLayer.name);
+                    var state = store.getState();
+                    connection.invoke('LeaveGame', state.reducer.currentPlayer.name);
                     break;
                 case mutations.PROCESS_CARD_CLICK:
                     connection.invoke('ProcessCardClick', action.index);
