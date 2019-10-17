@@ -66,10 +66,17 @@ export const reducer = combineReducers({
     },
     players: (players = defaultState.players, action) => {
         switch(action.type) {
-            case mutations.PLAYER_JOINED: 
-                return [...players, { name: action.name }];
+            case mutations.PLAYER_JOINED:
+                const player = action.player;
+                return [...players, { name: player.name, score: player.score, isActive: player.isActive }];
             case mutations.PLAYERS_LIST_PROVIDED:
-                return action.players.map((player) => { return { name: player }; });
+                return action.players.map((player) => {
+                    return {
+                        name: player.name,
+                        score: player.score,
+                        isActive: player.isActive
+                    };
+                });
             case mutations.PLAYER_LEAVED:
                 return players.filter((player) => { return player.name != action.name });
             default:

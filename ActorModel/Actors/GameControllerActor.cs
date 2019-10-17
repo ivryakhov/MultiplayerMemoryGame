@@ -8,14 +8,15 @@ namespace ActorModel.Actors
 {
     public class GameControllerActor : ReceiveActor
     {
-        private CircularList<(string, IActorRef)> _players;
+        private const int _maxPlayersNUmber = 4;
+        private CircularList<Player> _players;
         private Board _board;
 
         public GameControllerActor()
         {
            // _players = new Dictionary<string, IActorRef>();
            
-            _players = new CircularList<(string, IActorRef)>();
+            _players = new CircularList<Player>();
             _board = new Board();
 
             Receive<JoinGameMessage>(message => JoinGame(message));
@@ -36,15 +37,17 @@ namespace ActorModel.Actors
             {
                 Sender.Tell(new PlayerLoginFailed("Player with this name is already joined", message.ConnectionId));
             }
+            else if (_players.Count >= _maxPlayersNUmber)
+            {
+                Sender.Tell(new PlayerLoginFailed($"Number of players is not allowed to be more than {_maxPlayersNUmber}",
+                    message.ConnectionId));
+            }
             else
             {
-                IActorRef newPlayerActor =
-                    Context.ActorOf(
-                        Props.Create(() => new PlayerActor(message.PlayerName, message.ConnectionId)), message.PlayerName);
+                var newPlayer = new Player(message.PlayerName);
+                _players.Add(newPlayer);
 
-                _players.Add((message.PlayerName, newPlayerActor));
-
-                Sender.Tell(new PlayerJoinedMessage(message.PlayerName));
+                Sender.Tell(new PlayerJoinedMessage(newPlayer));
                 Sender.Tell(new PlayerLoginSuccess(message.PlayerName, message.ConnectionId));
             }
         }
@@ -65,7 +68,7 @@ namespace ActorModel.Actors
         {
             if (isPlayerExists(message.PlayerName))
             {
-                var playerToDelete = _players.First(p => p.Item1 == message.PlayerName);
+                var playerToDelete = _players.First(p => p.Name == message.PlayerName);
                 _players.Remove(playerToDelete);
                 Sender.Tell(new PlayerLogoutSuccess(message.PlayerName, message.ConnectionId));
                 Sender.Tell(new PlayerLeavedMessage(message.PlayerName));
@@ -74,8 +77,7 @@ namespace ActorModel.Actors
 
         private void GetPlayersList(RequestPlayersListMessage message)
         {
-            var players = _players.Select(p => p.Item1).ToList();
-            Sender.Tell(new PlayersListProvidedMessage(players, message.ConnectionId));
+            Sender.Tell(new PlayersListProvidedMessage(_players, message.ConnectionId));
         }
 
         private void RequestBoardState(RequestBoardStateMessage message)
@@ -91,7 +93,7 @@ namespace ActorModel.Actors
 
         private bool isPlayerExists(string name)
         {
-            return _players.FirstOrDefault(p => p.Item1 == name) != (null, null);
+            return _players.FirstOrDefault(p => p.Name == name) != null;
         }
     }
 }

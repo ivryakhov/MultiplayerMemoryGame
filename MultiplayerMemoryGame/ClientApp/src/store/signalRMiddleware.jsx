@@ -9,7 +9,7 @@ const setupConnection = (store) => {
         .build();    
     
     connection.on('PlayerJoined', data => {
-        store.dispatch({ type: mutations.PLAYER_JOINED, name: data });        
+        store.dispatch({ type: mutations.PLAYER_JOINED, player: data });        
     });
 
     connection.on('PlayerLeaved', data => {

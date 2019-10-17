@@ -9,7 +9,7 @@ const PlayerList = ({ players, getPlayersList }) => {
             {
                 players.map((player,index) =>
                     < div >
-                        <span>{player.name}</span>
+                        <span>{player.name} {player.score}</span>
                     </div>
                 )
             }

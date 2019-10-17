@@ -1,12 +1,14 @@
-﻿namespace ActorModel.Messages
+﻿using GameModel;
+
+namespace ActorModel.Messages
 {   
     public class PlayerJoinedMessage
     {
-        public string PlayerName { get; private set; }
+        public Player Player { get; private set; }
 
-        public PlayerJoinedMessage(string playerName)
+        public PlayerJoinedMessage(Player player)
         {
-            PlayerName = playerName;
+            Player = player;
         }
     }
 }

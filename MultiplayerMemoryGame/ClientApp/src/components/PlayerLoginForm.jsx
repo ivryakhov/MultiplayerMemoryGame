@@ -64,8 +64,7 @@ const mapDispatchToProps = (dispatch) => ({
         let playerName = e.target[`playerName`].value;
         dispatch(mutations.requestJoinPlayer(playerName));
     },
-    leaveGame() {
-        //e.preventDefault();
+    leaveGame() {        
         dispatch(mutations.requestLeaveGame());
     }
 });
