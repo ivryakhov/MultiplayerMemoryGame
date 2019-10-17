@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using GameModel;
 
 namespace ActorModel.Messages
 {
     public class PlayersListProvidedMessage
     {
-        public IList<string> PlayersList { get; private set; }
+        public IList<Player> PlayersList { get; private set; }
         public string ConnectionId { get; private set; }
 
-        public PlayersListProvidedMessage(IList<string> players, string connectionId)
+        public PlayersListProvidedMessage(IList<Player> players, string connectionId)
         {
             PlayersList = players;
             ConnectionId = connectionId;

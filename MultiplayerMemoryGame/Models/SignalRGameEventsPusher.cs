@@ -14,9 +14,9 @@ namespace MultiplayerMemoryGame.Models
             _gameHubContext = gameHubContext;
         }
 
-        public void PlayerJoined(string playerName)
+        public void PlayerJoined(Player player)
         {
-            _gameHubContext.Clients.All.SendAsync("PlayerJoined", playerName);
+            _gameHubContext.Clients.All.SendAsync("PlayerJoined", player);
         }
 
         public void PlayerLoginSuccess(string playerName, string connectionId)
@@ -39,7 +39,7 @@ namespace MultiplayerMemoryGame.Models
             _gameHubContext.Clients.Client(connectionId).SendAsync("PlayerLoginFailed", errorMessage);
         }
 
-        public void PlayersListProvided(IList<string> players, string connectionId)
+        public void PlayersListProvided(IList<Player> players, string connectionId)
         {
             _gameHubContext.Clients.Client(connectionId).SendAsync("PlayersListProvided", players);
         }

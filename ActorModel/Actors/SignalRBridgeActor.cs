@@ -27,7 +27,7 @@ namespace ActorModel.Actors
             Receive<PlayerJoinedMessage>(
                 message =>
                 {
-                    _gameEventPusher.PlayerJoined(message.PlayerName);
+                    _gameEventPusher.PlayerJoined(message.Player);
                 });
 
             Receive<PlayerLoginSuccess>(
