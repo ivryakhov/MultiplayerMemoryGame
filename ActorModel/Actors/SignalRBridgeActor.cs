@@ -71,6 +71,24 @@ namespace ActorModel.Actors
                 {
                     _gameEventPusher.BroadcastBoardState(message.Board);
                 });
+
+            Receive<LogMessage>(
+                message =>
+                {
+                    _gameEventPusher.LogMessage(message.Message);
+                });
+
+            Receive<NewActivePlayerMessage>(
+                message =>
+                {
+                    _gameEventPusher.NewActivePlayer(message.Player);
+                });
+
+            Receive<BroadcastPlayersListMessage>(
+                message =>
+                {
+                    _gameEventPusher.BroadcastPlayersList(message.PlayersList);
+                });
         }
     }
 }

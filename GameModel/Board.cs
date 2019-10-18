@@ -19,18 +19,31 @@ namespace GameModel
         private readonly Card _nullCard = new Card("", 0);
         private Card _openedCard;
 
+        public enum GameState
+        {
+            WaitingForPlayers,
+            GameStarted,
+            GameFinished
+        }
+
         public IEnumerable<Card> Cards { get; private set; }
         public int[] IdexesToPostoponeClosing { get; private set; }
+
+        public GameState State { get; private set; }
 
         public Board()
         {
             Cards = prepareCards();
             IdexesToPostoponeClosing = new int[0];
             _openedCard = _nullCard;
+            State = GameState.WaitingForPlayers;
         }
 
-        public void ProcessCardClick(int index)
+        public (bool, bool) ProcessCardClick(int index)
         {
+            bool isUpdateScoreRequired = false;
+            bool isNeededToTurnTransfer = false;
+
             var clickedCard = Cards.First(c => c.Index == index);
             if (_openedCard.Index == 0)
             {
@@ -44,14 +57,22 @@ namespace GameModel
                 {
                     Cards = Cards.Select(c => matchRequiredCard(c, clickedCard.FrontValue)).ToList();
                     IdexesToPostoponeClosing = new int[0];
+                    isUpdateScoreRequired = true;
                 }
                 else
                 {
                     Cards = Cards.Select(c => closeRequiredCards(c, _openedCard.Index, clickedCard.Index)).ToList();
                     IdexesToPostoponeClosing = new int[2] { _openedCard.Index, clickedCard.Index };
+                    isNeededToTurnTransfer = true;
                 }
                 _openedCard = _nullCard;
             }
+            return (isUpdateScoreRequired, isNeededToTurnTransfer);
+        }
+
+        public void StartGame()
+        {
+            State = GameState.GameStarted;
         }
 
         private IEnumerable<Card> prepareCards()

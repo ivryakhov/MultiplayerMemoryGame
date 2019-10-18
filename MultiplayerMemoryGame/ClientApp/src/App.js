@@ -2,6 +2,8 @@
 import { ConnectedGameBoard } from './components/GameBoard';
 import { ConnectedPlayerLoginForm } from './components/PlayerLoginForm';
 import { ConnectedPLayersList } from './components/PlayersList';
+import { ConnectedLogMessages } from './components/LogMessages';
+import { ConnectedStatusBoard } from './components/StatusBoard';
 
 export const App = () => (
             <div className="app">
@@ -9,12 +11,13 @@ export const App = () => (
                     <div className="tile is-3 is-vertical is-parent">
                         <div className="tile is-child box">                            
                             <ConnectedPlayerLoginForm />
+                            <ConnectedStatusBoard />
                         </div>
                         <div className="tile is-child box">
                             <ConnectedPLayersList />
                         </div>
                         <div className="tile is-child box">
-                            <p className="is-size-3">Mesage Log</p>  
+                            <ConnectedLogMessages />  
                         </div>
                     </div>
                     <div className="tile is-parent">

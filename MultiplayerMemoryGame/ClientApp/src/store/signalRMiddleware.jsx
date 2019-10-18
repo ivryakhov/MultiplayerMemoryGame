@@ -38,6 +38,14 @@ const setupConnection = (store) => {
         store.dispatch({ type: mutations.BOARD_STATE_PROVIDED, board: data });
     })
 
+    connection.on('LogMessage', data => {
+        store.dispatch({ type: mutations.LOG_MESSAGE_PROVIDED, message: data });
+    })
+
+    connection.on('NewActivePlayer', data => {
+        store.dispatch({ type: mutations.NEW_ACTIVE_PLAYER, player: data });
+    })
+
     connection.start()
         .then(() => {
             var playerName = localStorage.getItem('playerName');
@@ -74,7 +82,8 @@ export function signalRInvokeMiddleware(store) {
                     connection.invoke('LeaveGame', state.reducer.currentPlayer.name);
                     break;
                 case mutations.PROCESS_CARD_CLICK:
-                    connection.invoke('ProcessCardClick', action.index);
+                    var state = store.getState();
+                    connection.invoke('ProcessCardClick', action.index, state.reducer.currentPlayer.name);
                     break;
                 default:
                     break;
