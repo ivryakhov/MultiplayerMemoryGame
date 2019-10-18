@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using GameModel;
+﻿    using System.Collections.Generic;
+    using GameModel;
 
 namespace ActorModel.Messages
 {

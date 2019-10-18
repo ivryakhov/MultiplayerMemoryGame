@@ -58,5 +58,15 @@ namespace MultiplayerMemoryGame.Models
         {
             _gameHubContext.Clients.All.SendAsync("LogMessage", message);
         }
+
+        public void NewActivePlayer(Player player)
+        {
+            _gameHubContext.Clients.All.SendAsync("NewActivePlayer", player);
+        }
+
+        public void BroadcastPlayersList(IList<Player> players)
+        {
+            _gameHubContext.Clients.All.SendAsync("PlayersListProvided", players);
+        }
     }
 }

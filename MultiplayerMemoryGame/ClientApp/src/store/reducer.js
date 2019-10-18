@@ -4,7 +4,8 @@ import { loop, Cmd, combineReducers } from 'redux-loop';
 let defaultState = {
     board: {
         cards: [],
-        idexesToPostoponeClosing: []
+        idexesToPostoponeClosing: [],
+        state: "Waiting for players",
     },
     players: [],
     currentPlayer: {
@@ -12,18 +13,22 @@ let defaultState = {
         name: "",
         errorMessage: ""
     },
+    activePlayer: {
+        name: ""
+    },
     logMessages: []
 };
 
 export const reducer = combineReducers({
-    board:(boardState = defaultState.board, action) => {
+    board: (boardState = defaultState.board, action) => {
         switch (action.type) {
             case mutations.BOARD_STATE_PROVIDED:
                 if (action.board.idexesToPostoponeClosing.length === 0) {
                     return {
                         ...boardState,
                         cards: action.board.cards,
-                        idexesToPostoponeClosing: action.board.idexesToPostoponeClosing
+                        idexesToPostoponeClosing: action.board.idexesToPostoponeClosing,
+                        state: defineBoardState(action.board.state)
                     };
                 }
                 else {
@@ -120,6 +125,17 @@ export const reducer = combineReducers({
             default:
                 return logMessages;
         }
+    },
+    activePlayer: (activePLayer = defaultState.activePlayer, action) => {
+        switch (action.type) {
+            case mutations.NEW_ACTIVE_PLAYER:
+                return {
+                    ...activePLayer,
+                    name: action.player.name
+                }
+            default:
+                return activePLayer;
+        }
     }
 });
 
@@ -129,4 +145,15 @@ function takeATimeout() {
             resolve('ok');
         }, 1300);
     });
+}
+
+function defineBoardState(state) {
+    switch (state) {
+        case 0:
+            return "Waiting for players";
+        case 1:
+            return "Game started";
+        case 2:
+            return "Game finished";
+    }
 }

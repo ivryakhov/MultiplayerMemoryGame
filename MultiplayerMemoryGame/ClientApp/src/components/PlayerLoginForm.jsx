@@ -35,6 +35,7 @@ const PlayerLoginForm = ({ currentPlayer, joinPlayer, leaveGame }) => (
 
         :
         <div>
+                <p className="is-size-3">{currentPlayer.name}</p>
                 <button type="submit"
                     className={"button is-medium is-primary" + (currentPlayer.isJoined === mutations.LOGGING ? " is-loading" : "")}
                     disabled={currentPlayer.isJoined === mutations.LOGGING}

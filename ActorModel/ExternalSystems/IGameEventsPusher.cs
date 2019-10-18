@@ -14,5 +14,7 @@ namespace ActorModel.ExternalSystems
         void PlayerLogoutSuccess(string playerName, string connectionId);
         void PlayerLeaved(string playerName);
         void LogMessage(string message);
+        void NewActivePlayer(Player player);
+        void BroadcastPlayersList(IList<Player> playersList);
     }
 }

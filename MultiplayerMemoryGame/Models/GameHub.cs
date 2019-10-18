@@ -33,9 +33,9 @@ namespace MultiplayerMemoryGame.Models
             _signalRBridge.Tell(new RequestPlayersListMessage(Context.ConnectionId));
         }
 
-        public void ProcessCardClick(int index)
+        public void ProcessCardClick(int index, string name)
         {
-            _signalRBridge.Tell(new ProcessCardClickMessage(index));
+            _signalRBridge.Tell(new ProcessCardClickMessage(index, name));
         }
 
         public override Task OnConnectedAsync()

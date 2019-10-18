@@ -11,8 +11,8 @@ namespace ActorModel.Actors
         private const int _maxPlayersNUmber = 4;
         private const int _enoughPlayersNumberToStart = 2;
         private CircularList<Player> _players;
-        private Board _board;
-        private GameState _gameState = GameState.WhaitingPlayers;
+        private Player _activePlayer;
+        private Board _board;        
 
         public GameControllerActor()
         {
@@ -53,7 +53,7 @@ namespace ActorModel.Actors
                 Sender.Tell(new PlayerLoginSuccess(message.PlayerName, message.ConnectionId));
                 Sender.Tell(new LogMessage($"{newPlayer.Name} has joined to the game"));
             }
-            if (_players.Count >= _enoughPlayersNumberToStart)
+            if (_players.Count >= _enoughPlayersNumberToStart && _board.State == Board.GameState.WaitingForPlayers)
             {
                 startGame();
             }
@@ -79,6 +79,7 @@ namespace ActorModel.Actors
                 _players.Remove(playerToDelete);
                 Sender.Tell(new PlayerLogoutSuccess(message.PlayerName, message.ConnectionId));
                 Sender.Tell(new PlayerLeavedMessage(message.PlayerName));
+                Sender.Tell(new LogMessage($"{message.PlayerName} has left the game"));
             }
         }
 
@@ -94,8 +95,20 @@ namespace ActorModel.Actors
 
         private void ProcessCardClick(ProcessCardClickMessage message)
         {
-            _board.ProcessCardClick(message.Index);
-            Sender.Tell(new BroadcastBoardStateMessage(_board));
+            if (_board.State == Board.GameState.GameStarted && _activePlayer.Name == message.PlayerName)
+            {
+                var (isUpdateScoreRequired, isNeededToTurnTransfer) = _board.ProcessCardClick(message.Index);
+                if (isNeededToTurnTransfer)
+                {
+                    transferTurn();
+                }
+                if (isUpdateScoreRequired)
+                {
+                    _activePlayer.Score++;
+                    Sender.Tell(new BroadcastPlayersListMessage(_players));
+                }
+                Sender.Tell(new BroadcastBoardStateMessage(_board));
+            }
         }
 
         private bool isPlayerExists(string name)
@@ -104,8 +117,18 @@ namespace ActorModel.Actors
         }
 
         private void startGame()
-        {
+        {            
+            _board.StartGame();
+            Sender.Tell(new BroadcastBoardStateMessage(_board));
+            Sender.Tell(new LogMessage("Game is starting"));
+            transferTurn();
+        }
 
+        private void transferTurn()
+        {
+            _activePlayer = _players.GetNext();
+            Sender.Tell(new NewActivePlayerMessage(_activePlayer));
+            Sender.Tell(new LogMessage($"{_activePlayer.Name}'s turn"));
         }
     }
 }
