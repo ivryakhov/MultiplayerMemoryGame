@@ -25,6 +25,7 @@ export const PLAYERS_LIST_PROVIDED = `PLAYERS_LIST_PROVIDED`;
 
 export const BOARD_STATE_PROVIDED = `BOARD_STATE_PROVIDED`;
 export const CLOSE_POSTPONED_CARDS = `CLOSE_POSTPONED_CARDS`;
+export const LOG_MESSAGE_PROVIDED = `LOG_MESSAGE_PROVIDED`;
 
 export const processCardClick = (index) => ({
     type: PROCESS_CARD_CLICK,

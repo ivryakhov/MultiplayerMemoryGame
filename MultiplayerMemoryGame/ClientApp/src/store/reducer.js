@@ -11,7 +11,8 @@ let defaultState = {
         isJoined: mutations.LOGGEDOUT,
         name: "",
         errorMessage: ""
-    }
+    },
+    logMessages: []
 };
 
 export const reducer = combineReducers({
@@ -107,6 +108,17 @@ export const reducer = combineReducers({
                 return defaultState.currentPlayer;
             default:
                 return currentPlayer;
+        }
+    },
+    logMessages: (logMessages = defaultState.logMessages, action) => {
+        switch (action.type) {
+            case mutations.LOG_MESSAGE_PROVIDED:
+                return [
+                    action.message,
+                    ...logMessages
+                ]
+            default:
+                return logMessages;
         }
     }
 });

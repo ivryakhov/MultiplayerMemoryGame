@@ -38,6 +38,10 @@ const setupConnection = (store) => {
         store.dispatch({ type: mutations.BOARD_STATE_PROVIDED, board: data });
     })
 
+    connection.on('LogMessage', data => {
+        store.dispatch({ type: mutations.LOG_MESSAGE_PROVIDED, message: data });
+    })
+
     connection.start()
         .then(() => {
             var playerName = localStorage.getItem('playerName');

@@ -9,8 +9,10 @@ namespace ActorModel.Actors
     public class GameControllerActor : ReceiveActor
     {
         private const int _maxPlayersNUmber = 4;
+        private const int _enoughPlayersNumberToStart = 2;
         private CircularList<Player> _players;
         private Board _board;
+        private GameState _gameState = GameState.WhaitingPlayers;
 
         public GameControllerActor()
         {
@@ -49,6 +51,11 @@ namespace ActorModel.Actors
 
                 Sender.Tell(new PlayerJoinedMessage(newPlayer));
                 Sender.Tell(new PlayerLoginSuccess(message.PlayerName, message.ConnectionId));
+                Sender.Tell(new LogMessage($"{newPlayer.Name} has joined to the game"));
+            }
+            if (_players.Count >= _enoughPlayersNumberToStart)
+            {
+                startGame();
             }
         }
 
@@ -94,6 +101,11 @@ namespace ActorModel.Actors
         private bool isPlayerExists(string name)
         {
             return _players.FirstOrDefault(p => p.Name == name) != null;
+        }
+
+        private void startGame()
+        {
+
         }
     }
 }
