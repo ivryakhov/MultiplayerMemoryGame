@@ -16,5 +16,6 @@ namespace ActorModel.ExternalSystems
         void LogMessage(string message);
         void NewActivePlayer(Player player);
         void BroadcastPlayersList(IList<Player> playersList);
+        void BroadcastWinners(IList<Player> winners);
     }
 }

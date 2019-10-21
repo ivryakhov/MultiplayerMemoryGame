@@ -2,7 +2,7 @@
 import { connect } from "react-redux";
 import { requestPlayersList } from '../store/mutations';
 
-const PlayerList = ({ players, getPlayersList }) => {
+const PlayerList = ({ players }) => {
     return (
         <div>
             <p className="is-size-3">Active Players</p>
@@ -23,10 +23,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    getPlayersList() {
-        dispatch(requestPlayersList());
-    }
-});
-
-export const ConnectedPLayersList = connect(mapStateToProps, mapDispatchToProps)(PlayerList);
+export const ConnectedPLayersList = connect(mapStateToProps)(PlayerList);

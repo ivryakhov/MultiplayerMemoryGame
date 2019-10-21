@@ -9,8 +9,8 @@ const PlayerLoginForm = ({ currentPlayer, joinPlayer, leaveGame }) => (
         ?
         <div>
             <form onSubmit={joinPlayer}>
-                <div className="field">
-                    <p className="control">
+                <div className="field has-addons">
+                    <div className="control">
                         <input type="text"
                             name="playerName"
                             autoComplete="off"
@@ -18,17 +18,15 @@ const PlayerLoginForm = ({ currentPlayer, joinPlayer, leaveGame }) => (
                             disabled={currentPlayer.isJoined === mutations.LOGGING}
                             placeholder="Enter your name to join"
                         />
-                    </p>
-                </div>
-                <div className="field">
-                    <p className="control">
+                    </div>  
+                    <div className="control">
                         <button type="submit"
                             className={"button is-medium is-primary" + (currentPlayer.isJoined === mutations.LOGGING ? " is-loading" : "")}
                             disabled={currentPlayer.isJoined === mutations.LOGGING}
                         >
                             Join
                         </button>
-                    </p>
+                    </div>
                 </div>
             </form>
         </div>
