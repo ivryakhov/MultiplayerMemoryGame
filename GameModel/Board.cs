@@ -17,6 +17,7 @@ namespace GameModel
         };
 
         private readonly Card _nullCard = new Card("", 0);
+        private const int _pairsNumber = 15;
         private Card _openedCard;
 
         public enum GameState
@@ -66,6 +67,10 @@ namespace GameModel
                     isNeededToTurnTransfer = true;
                 }
                 _openedCard = _nullCard;
+                if (Cards.Where(c => c.IsMatched == true).Count() == _pairsNumber*2)
+                {
+                    State = GameState.GameFinished;
+                }
             }
             return (isUpdateScoreRequired, isNeededToTurnTransfer);
         }
@@ -73,12 +78,15 @@ namespace GameModel
         public void StartGame()
         {
             State = GameState.GameStarted;
+            Cards = prepareCards();
+            IdexesToPostoponeClosing = new int[0];
+            _openedCard = _nullCard;
         }
 
         private IEnumerable<Card> prepareCards()
         {
             Random r = new Random();
-            var uniqueNamesSet = _cardValues.OrderBy(i => r.Next()).Take(15).ToList();
+            var uniqueNamesSet = _cardValues.OrderBy(i => r.Next()).Take(_pairsNumber).ToList();
             var duplicatedNamesSet = uniqueNamesSet.Concat(uniqueNamesSet);
             var shuffledNamesSet = duplicatedNamesSet.OrderBy(i => r.Next()).ToList();
             var index = 1;

@@ -16,7 +16,8 @@ let defaultState = {
     activePlayer: {
         name: ""
     },
-    logMessages: []
+    logMessages: [],
+    winners: []
 };
 
 export const reducer = combineReducers({
@@ -135,6 +136,14 @@ export const reducer = combineReducers({
                 }
             default:
                 return activePLayer;
+        }
+    },
+    winners: (winners = defaultState.winners, action) => {
+        switch (action.type) {
+            case mutations.WINNERS_LIST_PROVIDED:
+                return action.winners;
+            default:
+                return winners;                
         }
     }
 });
