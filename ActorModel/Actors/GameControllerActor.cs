@@ -16,8 +16,6 @@ namespace ActorModel.Actors
 
         public GameControllerActor()
         {
-           // _players = new Dictionary<string, IActorRef>();
-           
             _players = new CircularList<Player>();
             _board = new Board();
 
@@ -27,7 +25,8 @@ namespace ActorModel.Actors
             Receive<RequestPlayersListMessage>(message => GetPlayersList(message));
             Receive<RequestBoardStateMessage>(message => RequestBoardState(message));
             Receive<ProcessCardClickMessage>(message => ProcessCardClick(message));
-        }
+            Receive<RequestNewGame>(message => startGame());
+        }       
 
         private void JoinGame(JoinGameMessage message)
         {            
@@ -102,12 +101,20 @@ namespace ActorModel.Actors
                 {
                     transferTurn();
                 }
+
                 if (isUpdateScoreRequired)
                 {
                     _activePlayer.Score++;
                     Sender.Tell(new BroadcastPlayersListMessage(_players));
                 }
                 Sender.Tell(new BroadcastBoardStateMessage(_board));
+
+                if (_board.State == Board.GameState.GameFinished)
+                {
+                    var maxScore = _players.Select(p => p.Score).Max();
+                    var winners = _players.Where(p => p.Score == maxScore).ToList();
+                    Sender.Tell(new BroadcastWinnersMessage(winners));
+                }
             }
         }
 
@@ -127,8 +134,7 @@ namespace ActorModel.Actors
         private void transferTurn()
         {
             _activePlayer = _players.GetNext();
-            Sender.Tell(new NewActivePlayerMessage(_activePlayer));
-            Sender.Tell(new LogMessage($"{_activePlayer.Name}'s turn"));
+            Sender.Tell(new NewActivePlayerMessage(_activePlayer));            
         }
     }
 }

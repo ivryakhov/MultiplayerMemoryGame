@@ -15,6 +15,7 @@ export const PLAYER_LOGIN_SUCCESS = `PLAYER_LOGIN_SUCCESS`;
 export const PLAYER_LOGIN_FAILED = `PLAYER_LOGIN_FAILED`;
 export const REQUEST_LEAVE_GAME = `REQUEST_LEAVE_GAME`;
 export const PLAYER_LOGOUT_SUCCESS = `PLAYER_LOGOUT_SUCCESS`;
+export const REQUEST_NEW_GAME = `REQUEST_NEW_GAME`;
 
 export const LOGGEDIN = `LOGGEDIN`
 export const LOGGING = `LOGGING`
@@ -23,6 +24,7 @@ export const LOGGEDOUT = `LOGGEDOUT`
 export const REQUEST_PLAYERS_LIST = `REQUEST_PLAYERS_LIST`;
 export const PLAYERS_LIST_PROVIDED = `PLAYERS_LIST_PROVIDED`;
 export const NEW_ACTIVE_PLAYER = `NEW_ACTIVE_PLAYER`;
+export const WINNERS_LIST_PROVIDED = `WINNERS_LIST_PROVIDED`;
 
 export const BOARD_STATE_PROVIDED = `BOARD_STATE_PROVIDED`;
 export const CLOSE_POSTPONED_CARDS = `CLOSE_POSTPONED_CARDS`;
@@ -44,4 +46,8 @@ export const requestPlayersList = () => ({
 
 export const requestLeaveGame = () => ({
     type: REQUEST_LEAVE_GAME
+})
+
+export const requestNewGame = () => ({
+    type: REQUEST_NEW_GAME
 })

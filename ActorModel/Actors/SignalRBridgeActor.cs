@@ -89,6 +89,12 @@ namespace ActorModel.Actors
                 {
                     _gameEventPusher.BroadcastPlayersList(message.PlayersList);
                 });
+
+            Receive<BroadcastWinnersMessage>(
+                message =>
+                {
+                    _gameEventPusher.BroadcastWinners(message.Winners);
+                });
         }
     }
 }

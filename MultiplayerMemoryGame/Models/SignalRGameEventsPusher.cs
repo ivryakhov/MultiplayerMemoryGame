@@ -68,5 +68,10 @@ namespace MultiplayerMemoryGame.Models
         {
             _gameHubContext.Clients.All.SendAsync("PlayersListProvided", players);
         }
+
+        public void BroadcastWinners(IList<Player> winners)
+        {
+            _gameHubContext.Clients.All.SendAsync("WinnersListProvided", winners);
+        }
     }
 }

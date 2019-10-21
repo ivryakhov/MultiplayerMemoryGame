@@ -46,6 +46,10 @@ const setupConnection = (store) => {
         store.dispatch({ type: mutations.NEW_ACTIVE_PLAYER, player: data });
     })
 
+    connection.on('WinnersListProvided', data => {
+        store.dispatch({ type: mutations.WINNERS_LIST_PROVIDED, winners: data });
+    })
+
     connection.start()
         .then(() => {
             var playerName = localStorage.getItem('playerName');
@@ -84,6 +88,9 @@ export function signalRInvokeMiddleware(store) {
                 case mutations.PROCESS_CARD_CLICK:
                     var state = store.getState();
                     connection.invoke('ProcessCardClick', action.index, state.reducer.currentPlayer.name);
+                    break;
+                case mutations.REQUEST_NEW_GAME:
+                    connection.invoke('RequestNewGame')
                     break;
                 default:
                     break;
