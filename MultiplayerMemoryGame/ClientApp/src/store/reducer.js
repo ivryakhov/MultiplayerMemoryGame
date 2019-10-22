@@ -36,7 +36,7 @@ export const reducer = combineReducers({
                     return loop(
                         {
                             ...boardState,
-                            cards: action.board.cards.map((card, index) => {
+                            cards: action.board.cards.map((card) => {
                                 if (card.index === action.board.idexesToPostoponeClosing[0] ||
                                     card.index === action.board.idexesToPostoponeClosing[1]) {
                                     card.isClosed = false;

@@ -8,8 +8,8 @@ const GameBoard = ({ board, handleClickOnCard }) => (
     <div>
         <div style={styles.playground}>
             {
-                board.cards.map((card, index) => {
-                    return <Card key={index} picture={card.frontValue} click={() => handleClickOnCard(card.index)} closed={card.isClosed} disabled={card.isDisabled} matched={card.isMatched} />;
+                board.cards.map((card) => {
+                    return <Card key={card.id} picture={card.frontValue} click={() => handleClickOnCard(card.index)} closed={card.isClosed} disabled={card.isDisabled} matched={card.isMatched} />;
                 })
             }
         </div>
