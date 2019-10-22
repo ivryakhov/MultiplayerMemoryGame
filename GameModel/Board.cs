@@ -77,10 +77,16 @@ namespace GameModel
 
         public void StartGame()
         {
+            Cards = prepareCards();            
             State = GameState.GameStarted;
-            Cards = prepareCards();
+            
             IdexesToPostoponeClosing = new int[0];
             _openedCard = _nullCard;
+        }
+
+        public void StopGame()
+        {
+            State = GameState.WaitingForPlayers;
         }
 
         private IEnumerable<Card> prepareCards()

@@ -10,6 +10,8 @@ namespace ActorModel.Actors
     {
         private const int _maxPlayersNUmber = 4;
         private const int _enoughPlayersNumberToStart = 2;
+        private readonly Player _nullPlayer = new Player("");
+
         private CircularList<Player> _players;
         private Player _activePlayer;
         private Board _board;        
@@ -18,6 +20,7 @@ namespace ActorModel.Actors
         {
             _players = new CircularList<Player>();
             _board = new Board();
+            _activePlayer = _nullPlayer;
 
             Receive<JoinGameMessage>(message => JoinGame(message));
             Receive<ReturnToGameMessage>(message => ReturnToGame(message));
@@ -76,9 +79,20 @@ namespace ActorModel.Actors
             {
                 var playerToDelete = _players.First(p => p.Name == message.PlayerName);
                 _players.Remove(playerToDelete);
+                if (_activePlayer.Name == playerToDelete.Name)
+                {
+                    transferTurn();
+                }
+                if (_players.Count < _enoughPlayersNumberToStart && _board.State != Board.GameState.WaitingForPlayers)
+                {
+                    _board.StopGame();
+                    _activePlayer = _nullPlayer;
+                    Sender.Tell(new NewActivePlayerMessage(_activePlayer));
+                }
                 Sender.Tell(new PlayerLogoutSuccess(message.PlayerName, message.ConnectionId));
                 Sender.Tell(new PlayerLeavedMessage(message.PlayerName));
                 Sender.Tell(new LogMessage($"{message.PlayerName} has left the game"));
+                Sender.Tell(new BroadcastBoardStateMessage(_board));
             }
         }
 

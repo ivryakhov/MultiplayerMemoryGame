@@ -1,4 +1,6 @@
-﻿namespace GameModel
+﻿using System;
+
+namespace GameModel
 {
     public class Card
     {
@@ -7,6 +9,7 @@
         public bool IsClosed { get; set; }
         public bool IsDisabled { get; set; }
         public bool IsMatched { get; set; }
+        public string Id { get; set; }
 
         public Card(string frontValue, int index)
         {
@@ -15,6 +18,7 @@
             IsClosed = true;
             IsDisabled = false;
             IsMatched = false;
+            Id = Guid.NewGuid().ToString();
         }
     }
 }
